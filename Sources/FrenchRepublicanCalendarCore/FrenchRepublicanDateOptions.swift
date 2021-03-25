@@ -8,13 +8,13 @@
 
 import Foundation
 
-struct FrenchRepublicanDateOptions {
+public struct FrenchRepublicanDateOptions {
     
-    static let `default` = FrenchRepublicanDateOptions(romanYear: false, variant: .original)
-    #if WASM
-    static let current = FrenchRepublicanDateOptions.default
+    public static let `default` = FrenchRepublicanDateOptions(romanYear: false, variant: .original)
+    #if os(WASI)
+    public static let current = FrenchRepublicanDateOptions.default
     #else
-    static var current: FrenchRepublicanDateOptions {
+    public static var current: FrenchRepublicanDateOptions {
         get {
             FrenchRepublicanDateOptions(
                 romanYear: UserDefaults.standard.bool(forKey: "frdo-roman"),
@@ -28,10 +28,10 @@ struct FrenchRepublicanDateOptions {
     }
     #endif
     
-    var romanYear: Bool
-    var variant: Variant
+    public var romanYear: Bool
+    public var variant: Variant
     
-    enum Variant: Int {
+    public enum Variant: Int {
         case original
     }
 }

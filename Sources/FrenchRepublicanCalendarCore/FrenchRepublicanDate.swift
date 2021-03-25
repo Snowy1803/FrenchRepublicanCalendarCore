@@ -8,21 +8,21 @@
 
 import Foundation
 
-struct FrenchRepublicanDate {
+public struct FrenchRepublicanDate {
     
     // MARK: Static: Origin and Maximum
     
     /// The origin of the Republican Calendar, 1er Vendémiaire An 1 or 1792-09-22
-    static let origin = Date(timeIntervalSince1970: -5594191200)
+    public static let origin = Date(timeIntervalSince1970: -5594191200)
     /// The maximum safe date to convert, currently 15300-12-31
-    static let maxSafeDate = Date(timeIntervalSinceReferenceDate: 419675853600) // 15299-12-31
+    public static let maxSafeDate = Date(timeIntervalSinceReferenceDate: 419675853600) // 15299-12-31
     /// The safe range that is guaranteed to convert properly
-    static let safeRange = origin...maxSafeDate
+    public static let safeRange = origin...maxSafeDate
     
     // MARK: Instance variables
     
     /// the system Date value for this Republican Date
-    var date: Date
+    public var date: Date
     
     /// `year`: The year, starting at 1 for 1792-09-22,
     ///
@@ -39,19 +39,19 @@ struct FrenchRepublicanDate {
     /// weekOfMonth: The week within the month (a week being 10 days),
     ///
     /// weekOfYear: The week within the year (a week being 10 days)
-    var components: DateComponents!
+    public var components: DateComponents!
     
-    var options: FrenchRepublicanDateOptions
+    public var options: FrenchRepublicanDateOptions
     
     // MARK: Component accessors
     
     /// The day in year date component, 1-indexed
-    var dayInYear: Int {
+    internal var dayInYear: Int {
         return (components.month! - 1) * 30 + components.day!
     }
     
     /// true if the current Republican year is sextil, false otherwise
-    var isYearSextil: Bool {
+    public var isYearSextil: Bool {
         return components.year!.isSextil
     }
     
@@ -59,7 +59,7 @@ struct FrenchRepublicanDate {
     
     /// Creates a Republican Date from the given Gregorian Date
     /// - Parameter date: the Gregorian Date
-    init(date: Date) {
+    public init(date: Date) {
         self.date = date
         options = .current
         dateToFrenchRepublican()
@@ -73,7 +73,7 @@ struct FrenchRepublicanDate {
     ///   - minute: Minutes
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
-    init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
+    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
         self.date = Date(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
         options = .current
         initComponents(dayOfYear: dayInYear - 1, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
@@ -115,7 +115,7 @@ struct FrenchRepublicanDate {
     // MARK: Mutating utils
     
     /// Increments the Republican year for this Date. The Gregorian `date` will be recomputed.
-    mutating func nextYear() {
+    public mutating func nextYear() {
         components.year! += 1
         components.yearForWeekOfYear! += 1
         date = Date(dayInYear: dayInYear, year: components.year!, hour: components.hour, minute: components.minute, second: components.second, nanosecond: components.nanosecond)
@@ -160,7 +160,7 @@ fileprivate extension Int {
 }
 
 extension Calendar {
-    static let gregorian: Calendar = {
+    public static let gregorian: Calendar = {
         var cal = Calendar(identifier: .gregorian)
         cal.locale = Locale(identifier: "fr-FR")
         return cal
@@ -176,7 +176,7 @@ extension Date {
     ///   - minute: Minute, will directly be copied over
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
-    init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
+    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
         self = Calendar.gregorian.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond))!
     }
 }
