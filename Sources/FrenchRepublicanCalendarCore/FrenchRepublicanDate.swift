@@ -46,7 +46,7 @@ public struct FrenchRepublicanDate {
     // MARK: Component accessors
     
     /// The day in year date component, 1-indexed
-    internal var dayInYear: Int {
+    public var dayInYear: Int {
         return (components.month! - 1) * 30 + components.day!
     }
     
