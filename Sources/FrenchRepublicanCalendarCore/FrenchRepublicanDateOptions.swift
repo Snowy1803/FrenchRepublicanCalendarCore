@@ -19,7 +19,7 @@ public struct FrenchRepublicanDateOptions {
         self.variant = variant
     }
     
-    public enum Variant: Int {
+    public enum Variant: Int, CaseIterable {
         case original
     }
 }
@@ -33,6 +33,14 @@ extension FrenchRepublicanDateOptions.Variant {
         switch self {
         case .original:
             return year % 4 == 3
+        }
+    }
+}
+
+extension FrenchRepublicanDateOptions.Variant: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .original: return "Original"
         }
     }
 }

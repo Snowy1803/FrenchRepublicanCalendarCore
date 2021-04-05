@@ -16,33 +16,36 @@ class FrenchRepublicanCalendarTests: XCTestCase {
     }
 
     func testDateLinearity() throws {
-        var date = FrenchRepublicanDate.origin
-        var prevDay: Int?
-        var prevYear: Int?
-        while date <= FrenchRepublicanDate.maxSafeDate {
-            let frd = FrenchRepublicanDate(date: date)
-            
-            if let prevDay = prevDay,
-               let prevYear = prevYear {
-                if frd.dayInYear == 1 {
-                    XCTAssert(prevDay == (FrenchRepublicanDateOptions.current.variant.isYearSextil(prevYear) ? 366 : 365), "Year ends after \(prevDay) days")
-                    XCTAssert(frd.components.year! - prevYear == 1, "Year wasn't incremented")
-                } else {
-                    XCTAssert(frd.dayInYear - prevDay == 1, "Invalid \(date) = \(frd.toLongString()) after \(FrenchRepublicanDate(dayInYear: prevDay, year: prevYear).toLongString())")
-                    XCTAssert(frd.components.year! == prevYear, "Year changed without resetting day at \(frd.toLongString())")
+        for variant in FrenchRepublicanDateOptions.Variant.allCases {
+            FrenchRepublicanDateOptions.current.variant = variant
+            var date = FrenchRepublicanDate.origin
+            var prevDay: Int?
+            var prevYear: Int?
+            while date <= FrenchRepublicanDate.maxSafeDate {
+                let frd = FrenchRepublicanDate(date: date)
+                
+                if let prevDay = prevDay,
+                   let prevYear = prevYear {
+                    if frd.dayInYear == 1 {
+                        XCTAssert(prevDay == (FrenchRepublicanDateOptions.current.variant.isYearSextil(prevYear) ? 366 : 365), "Year ends after \(prevDay) days")
+                        XCTAssert(frd.components.year! - prevYear == 1, "Year wasn't incremented")
+                    } else {
+                        XCTAssert(frd.dayInYear - prevDay == 1, "Invalid \(date) = \(frd.toLongString()) after \(FrenchRepublicanDate(dayInYear: prevDay, year: prevYear).toLongString())")
+                        XCTAssert(frd.components.year! == prevYear, "Year changed without resetting day at \(frd.toLongString())")
+                    }
                 }
+                
+                prevDay = frd.dayInYear
+                prevYear = frd.components.year!
+                
+                let copy = FrenchRepublicanDate(dayInYear: prevDay!, year: prevYear!, hour: frd.components.hour, minute: frd.components.minute, second: frd.components.second, nanosecond: frd.components.nanosecond)
+                
+                XCTAssert(copy.date == date, "Reconversion fails for \(date) = \(frd.toLongString()) ≠ \(copy.date)")
+                
+                date = Calendar.gregorian.date(byAdding: .day, value: 1, to: date)!
             }
-            
-            prevDay = frd.dayInYear
-            prevYear = frd.components.year!
-            
-            let copy = FrenchRepublicanDate(dayInYear: prevDay!, year: prevYear!, hour: frd.components.hour, minute: frd.components.minute, second: frd.components.second, nanosecond: frd.components.nanosecond)
-            
-            XCTAssert(copy.date == date, "Reconversion fails for \(date) = \(frd.toLongString()) ≠ \(copy.date)")
-            
-            date = Calendar.gregorian.date(byAdding: .day, value: 1, to: date)!
+            print("[Variant \(variant)] Tested until (Gregorian):", date)
         }
-        print("Tested until (Gregorian):", date)
     }
     
     func testHistoricalDates() {
