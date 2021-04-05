@@ -41,7 +41,7 @@ public struct FrenchRepublicanDate {
     /// weekOfYear: The week within the year (a week being 10 days)
     public var components: DateComponents!
     
-    public var options: FrenchRepublicanDateOptions
+    public private(set) var options: FrenchRepublicanDateOptions
     
     // MARK: Component accessors
     
@@ -59,12 +59,14 @@ public struct FrenchRepublicanDate {
     
     /// Creates a Republican Date from the given Gregorian Date
     /// - Parameter date: the Gregorian Date
-    public init(date: Date) {
+    public init(date: Date, options: FrenchRepublicanDateOptions? = nil) {
         self.date = date
-        if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
-            options = type.current
+        if let options = options {
+            self.options = options
+        } else if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
+            self.options = type.current
         } else {
-            options = .default
+            self.options = .default
         }
         dateToFrenchRepublican()
     }
@@ -77,12 +79,14 @@ public struct FrenchRepublicanDate {
     ///   - minute: Minutes
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
-    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
+    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
         self.date = Date(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
-        if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
-            options = type.current
+        if let options = options {
+            self.options = options
+        } else if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
+            self.options = type.current
         } else {
-            options = .default
+            self.options = .default
         }
         initComponents(dayOfYear: dayInYear - 1, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
     }
@@ -110,7 +114,7 @@ public struct FrenchRepublicanDate {
     
     /// Initializes the `components` property with the given values
     /// - Parameters:
-    ///   - dayOfYear: Days of year, 0-indexed
+    ///   - dayOfYear: Day of year, 0-indexed
     ///   - year: Year
     ///   - hour: Hour
     ///   - minute: Minutes
@@ -175,7 +179,7 @@ extension Calendar {
     }()
 }
 
-extension Date {
+internal extension Date {
     /// Creates a Date from the given Republican date components
     /// - Parameters:
     ///   - dayInYear: Republican Day in Year, 1-indexed
@@ -184,7 +188,8 @@ extension Date {
     ///   - minute: Minute, will directly be copied over
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
-    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
+    /// - Note: Library users: use FrenchRepublicanDate.init(dayInYear: ...).date
+    init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
         self = Calendar.gregorian.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond))!
     }
 }
