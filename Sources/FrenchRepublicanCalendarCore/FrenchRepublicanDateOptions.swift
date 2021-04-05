@@ -27,3 +27,12 @@ public struct FrenchRepublicanDateOptions {
 public protocol SaveableFrenchRepublicanDateOptions {
     static var current: FrenchRepublicanDateOptions { get set }
 }
+
+extension FrenchRepublicanDateOptions.Variant {
+    public func isYearSextil(_ year: Int) -> Bool {
+        switch self {
+        case .original:
+            return year % 4 == 3
+        }
+    }
+}

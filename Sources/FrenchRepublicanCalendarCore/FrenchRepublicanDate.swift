@@ -52,7 +52,7 @@ public struct FrenchRepublicanDate {
     
     /// true if the current Republican year is sextil, false otherwise
     public var isYearSextil: Bool {
-        return components.year!.isSextil
+        return options.variant.isYearSextil(components.year!)
     }
     
     // MARK: Initializers
@@ -80,7 +80,6 @@ public struct FrenchRepublicanDate {
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
     public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
-        self.date = Date(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
         if let options = options {
             self.options = options
         } else if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
@@ -88,6 +87,7 @@ public struct FrenchRepublicanDate {
         } else {
             self.options = .default
         }
+        self.date = Date(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: self.options)
         initComponents(dayOfYear: dayInYear - 1, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
     }
     
@@ -99,7 +99,7 @@ public struct FrenchRepublicanDate {
         var year = gYear - 1791
         var dayOfYear = Calendar.gregorian.ordinality(of: .day, in: .year, for: date)!
         dayOfYear.increment(by: -265, year: &year, daysInYear: \.daysInRepublicanYear)
-        if gYear.isSextil {
+        if options.variant.isYearSextil(gYear) {
             dayOfYear.increment(by: -1, year: &year, daysInYear: \.daysInRepublicanYear)
         }
         if (gYear).isBissextil {
@@ -130,24 +130,19 @@ public struct FrenchRepublicanDate {
     public mutating func nextYear() {
         components.year! += 1
         components.yearForWeekOfYear! += 1
-        date = Date(dayInYear: dayInYear, year: components.year!, hour: components.hour, minute: components.minute, second: components.second, nanosecond: components.nanosecond)
+        date = Date(dayInYear: dayInYear, year: components.year!, hour: components.hour, minute: components.minute, second: components.second, nanosecond: components.nanosecond, options: options)
     }
 }
 
 fileprivate extension Int {
-    /// If self represents a republican year, this returns true if it is sextil
-    var isSextil: Bool {
-        return self % 4 == 3
-    }
-    
     /// If self represents a gregorian year, this returns true if it is bissextil
     var isBissextil: Bool {
         return ((self % 100 != 0) && (self % 4 == 0)) || self % 400 == 0
     }
     
-    /// If self represents a republican year, this returns the number of days in it
+    /// If self represents a republican year in the original variant, this returns the number of days in it
     var daysInRepublicanYear: Int {
-        isSextil ? 366 : 365
+        FrenchRepublicanDateOptions.Variant.original.isYearSextil(self) ? 366 : 365
     }
     
     /// If self represents a gregorian year, this returns the number of days in it
@@ -189,8 +184,8 @@ internal extension Date {
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
     /// - Note: Library users: use FrenchRepublicanDate.init(dayInYear: ...).date
-    init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
-        self = Calendar.gregorian.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond))!
+    init(dayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) {
+        self = Calendar.gregorian.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options))!
     }
 }
 
@@ -204,7 +199,7 @@ fileprivate extension Date {
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
     /// - Returns: A DateComponents object containing the gregorian year and day of year, with the additional time components copied over.
-    static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) -> DateComponents {
+    static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) -> DateComponents {
         var gYear = rYear + 1792
         var gDayOfYear = rDayInYear
         gDayOfYear.increment(by: -102, year: &gYear, daysInYear: \.daysInGregorianYear)
@@ -217,7 +212,7 @@ fileprivate extension Date {
             yt += diff
         } while diff != 0
         
-        if (rYear - 1).isSextil && !(gYear % 4 == 0 && !gYear.isBissextil) {
+        if options.variant.isYearSextil(rYear - 1) && !(gYear % 4 == 0 && !gYear.isBissextil) {
             gDayOfYear.increment(by: 1, year: &gYear, daysInYear: \.daysInGregorianYear)
         }
         

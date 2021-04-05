@@ -10,6 +10,10 @@
 import XCTest
 
 class FrenchRepublicanCalendarTests: XCTestCase {
+    
+    override func setUp() {
+        FrenchRepublicanDateOptions.current = .default
+    }
 
     func testDateLinearity() throws {
         var date = FrenchRepublicanDate.origin
@@ -21,7 +25,7 @@ class FrenchRepublicanCalendarTests: XCTestCase {
             if let prevDay = prevDay,
                let prevYear = prevYear {
                 if frd.dayInYear == 1 {
-                    XCTAssert(prevDay == (prevYear % 4 == 3 ? 366 : 365), "Year ends after \(prevDay) days")
+                    XCTAssert(prevDay == (FrenchRepublicanDateOptions.current.variant.isYearSextil(prevYear) ? 366 : 365), "Year ends after \(prevDay) days")
                     XCTAssert(frd.components.year! - prevYear == 1, "Year wasn't incremented")
                 } else {
                     XCTAssert(frd.dayInYear - prevDay == 1, "Invalid \(date) = \(frd.toLongString()) after \(FrenchRepublicanDate(dayInYear: prevDay, year: prevYear).toLongString())")
@@ -77,4 +81,9 @@ class FrenchRepublicanCalendarTests: XCTestCase {
             semaphore.wait()
         }
     }
+}
+
+extension FrenchRepublicanDateOptions: SaveableFrenchRepublicanDateOptions {
+    // permits changing the current options, doesn't save it anywhere, for testing
+    public static var current: FrenchRepublicanDateOptions = .default
 }
