@@ -21,6 +21,7 @@ public struct FrenchRepublicanDateOptions {
     
     public enum Variant: Int, CaseIterable {
         case original
+        case romme
     }
 }
 
@@ -33,6 +34,8 @@ extension FrenchRepublicanDateOptions.Variant {
         switch self {
         case .original:
             return year % 4 == 3
+        case .romme:
+            return (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0) && (year % 4000 != 0)
         }
     }
 }
@@ -41,6 +44,7 @@ extension FrenchRepublicanDateOptions.Variant: CustomStringConvertible {
     public var description: String {
         switch self {
         case .original: return "Original"
+        case .romme: return "Romme"
         }
     }
 }
