@@ -30,7 +30,7 @@ public struct FrenchRepublicanDate {
     ///
     /// day: The day in the month 1-30 (1-5 or 1-6 for the 13th month, depending on .isYearSextil),
     ///
-    /// hour, minute, second, nanosecond: The same as in the gregorian calendar,
+    /// hour, minute, second, nanosecond: The same as in the gregorian calendar (use DecimalTime if you want to convert them to decimal time),
     ///
     /// weekday: The weekday 1-10,
     ///
