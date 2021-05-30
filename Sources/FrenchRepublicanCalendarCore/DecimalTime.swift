@@ -105,10 +105,10 @@ public extension DecimalTime {
         }
     }
     
-    /// The second converted to SI units, and rounded to the nearest integer value
-    var secondSIRounded: Int {
+    /// The second converted to SI units, floored to an integer value
+    var secondSI: Int {
         get {
-            Int(timeSinceMidnight.rounded()) % 60
+            Int(timeSinceMidnight) % 60
         }
         set {
             timeSinceMidnight = TimeInterval(hourSI * 3600 + minuteSI * 60 + newValue)
