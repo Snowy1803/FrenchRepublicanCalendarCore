@@ -83,3 +83,45 @@ extension DecimalTime: CustomDebugStringConvertible {
         "\(description)\(String(remainder).dropFirst())"
     }
 }
+
+public extension DecimalTime {
+    /// The hour converted to SI units
+    var hourSI: Int {
+        get {
+            Int(timeSinceMidnight) / 3600
+        }
+        set {
+            timeSinceMidnight = TimeInterval(newValue * 3600 + minuteSI * 60) + secondSIPrecise
+        }
+    }
+    
+    /// The minute converted to SI units
+    var minuteSI: Int {
+        get {
+            Int(timeSinceMidnight) % 3600 / 60
+        }
+        set {
+            timeSinceMidnight = TimeInterval(hourSI * 3600 + newValue * 60) + secondSIPrecise
+        }
+    }
+    
+    /// The second converted to SI units, and rounded to the nearest integer value
+    var secondSIRounded: Int {
+        get {
+            Int(timeSinceMidnight.rounded()) % 60
+        }
+        set {
+            timeSinceMidnight = TimeInterval(hourSI * 3600 + minuteSI * 60 + newValue)
+        }
+    }
+    
+    /// The second converted to SI units, and rounded to the nearest integer value
+    var secondSIPrecise: TimeInterval {
+        get {
+            timeSinceMidnight.truncatingRemainder(dividingBy: 60)
+        }
+        set {
+            timeSinceMidnight = TimeInterval(hourSI * 3600 + minuteSI * 60) + newValue
+        }
+    }
+}

@@ -106,6 +106,23 @@ class FrenchRepublicanCalendarTests: XCTestCase {
         XCTAssertEqual(rand.description, "7:84:27")
         XCTAssertEqual(rand.remainder, 0.2, accuracy: 1e-6)
         XCTAssertEqual(rand.decimalTime, 78427.2, accuracy: 1e-6)
+        
+        var edit = DecimalTime(timeSinceMidnight: 3601)
+        XCTAssertEqual(edit.hourSI, 1)
+        XCTAssertEqual(edit.minuteSI, 0)
+        XCTAssertEqual(edit.secondSIRounded, 1)
+        edit.minuteSI = 7
+        XCTAssertEqual(edit.hourSI, 1)
+        XCTAssertEqual(edit.minuteSI, 7)
+        XCTAssertEqual(edit.secondSIRounded, 1)
+        edit.hourSI = 3
+        XCTAssertEqual(edit.hourSI, 3)
+        XCTAssertEqual(edit.minuteSI, 7)
+        XCTAssertEqual(edit.secondSIRounded, 1)
+        edit.secondSIRounded = 51
+        XCTAssertEqual(edit.hourSI, 3)
+        XCTAssertEqual(edit.minuteSI, 7)
+        XCTAssertEqual(edit.secondSIRounded, 51)
     }
 }
 
