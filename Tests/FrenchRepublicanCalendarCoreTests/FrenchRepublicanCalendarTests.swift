@@ -110,19 +110,19 @@ class FrenchRepublicanCalendarTests: XCTestCase {
         var edit = DecimalTime(timeSinceMidnight: 3601)
         XCTAssertEqual(edit.hourSI, 1)
         XCTAssertEqual(edit.minuteSI, 0)
-        XCTAssertEqual(edit.secondSIRounded, 1)
+        XCTAssertEqual(edit.secondSIPrecise, 1, accuracy: 1e-6)
         edit.minuteSI = 7
         XCTAssertEqual(edit.hourSI, 1)
         XCTAssertEqual(edit.minuteSI, 7)
-        XCTAssertEqual(edit.secondSIRounded, 1)
+        XCTAssertEqual(edit.secondSIPrecise, 1, accuracy: 1e-6)
         edit.hourSI = 3
         XCTAssertEqual(edit.hourSI, 3)
         XCTAssertEqual(edit.minuteSI, 7)
-        XCTAssertEqual(edit.secondSIRounded, 1)
-        edit.secondSIRounded = 51
+        XCTAssertEqual(edit.secondSIPrecise, 1, accuracy: 1e-6)
+        edit.secondSI = 51
         XCTAssertEqual(edit.hourSI, 3)
         XCTAssertEqual(edit.minuteSI, 7)
-        XCTAssertEqual(edit.secondSIRounded, 51)
+        XCTAssertEqual(edit.secondSIPrecise, 51, accuracy: 1e-6)
     }
 }
 
