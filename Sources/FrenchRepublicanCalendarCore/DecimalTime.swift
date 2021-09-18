@@ -70,9 +70,19 @@ public extension DecimalTime {
 }
 
 extension DecimalTime: CustomStringConvertible {
+    /// Returns a description, without the remainder, in the `h:mm` format
+    public var hourAndMinuteFormatted: String {
+        "\(hour):\(("0" + String(minute)).suffix(2))"
+    }
+    
+    /// Returns a description, without the remainder, in the `h:mm:ss` format
+    public var hourMinuteSecondsFormatted: String {
+        "\(hourAndMinuteFormatted):\(("0" + String(second)).suffix(2))"
+    }
+    
     /// Returns a description, without the remainder, in the `h:mm:ss` format
     public var description: String {
-        "\(hour):\(("0" + String(minute)).suffix(2)):\(("0" + String(second)).suffix(2))"
+        hourMinuteSecondsFormatted
     }
 }
 
