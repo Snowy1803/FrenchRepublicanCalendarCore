@@ -65,6 +65,10 @@ public struct FrenchRepublicanDate {
     
     /// Creates a Republican Date from the given Gregorian Date
     /// - Parameter date: the Gregorian Date
+    public init(date: Date, options: FrenchRepublicanDateOptions? = nil) {
+        self.init(date: date, options: options, timeZone: nil)
+    }
+    
     public init(date: Date, options: FrenchRepublicanDateOptions? = nil, timeZone: TimeZone?) {
         self.date = date
         if let options = options {
@@ -88,6 +92,10 @@ public struct FrenchRepublicanDate {
     ///   - minute: Minutes
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
+    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
+        self.init(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: nil)
+    }
+    
     public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil, timeZone: TimeZone?) {
         if let options = options {
             self.options = options
@@ -219,6 +227,10 @@ internal extension Date {
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
     /// - Note: Library users: use FrenchRepublicanDate.init(dayInYear: ...).date
+    init(dayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) {
+        self.init(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: nil)
+    }
+
     init(dayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone?) {
         var GregorianCalendar: Calendar = Calendar.gregorian
         if let timeZone = timeZone {
@@ -238,7 +250,11 @@ fileprivate extension Date {
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
     /// - Returns: A DateComponents object containing the gregorian year and day of year, with the additional time components copied over.
-    static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone?) -> DateComponents {
+    static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) -> DateComponents {
+        Date.dateToGregorian(dayInYear: rDayInYear, year: rYear, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: nil)
+    }
+    
+        static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone?) -> DateComponents {
         var GregorianCalendar: Calendar = Calendar.gregorian
         if let timeZone = timeZone {
             GregorianCalendar.timeZone = timeZone

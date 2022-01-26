@@ -68,6 +68,10 @@ public struct DecimalTime {
 
 public extension DecimalTime {
     /// Initializes a new DecimalTime with the current time
+    init(base: Date = Date()) {
+        self.init(base: base, timeZone: nil)
+    }
+
     init(base: Date = Date(), timeZone: TimeZone?) {
         var GregorianCalendar: Calendar = Calendar.gregorian
         if let timeZone = timeZone {
