@@ -13,7 +13,7 @@
 import Foundation
 
 extension FrenchRepublicanDate: CustomDebugStringConvertible {
-    public static let allMonthNames = ["Vendémiaire", "Brumaire", "Frimaire", "Nivôse", "Pluviôse", "Ventôse", "Germinal", "Floréal", "Prairial", "Messidor", "Thermidor", "Fructidor", "Sansculottide"]
+    public static let allMonthNames = ["Vendémiaire", "Brumaire", "Frimaire", "Nivôse", "Pluviôse", "Ventôse", "Germinal", "Floréal", "Prairial", "Messidor", "Thermidor", "Fructidor", "Sansculottides"]
     public static let sansculottidesDayNames = ["Jour de la vertu", "Jour du génie", "Jour du travail", "Jour de l'opinion", "Jour des récompenses", "Jour de la révolution"]
 
     public static let shortMonthNames = ["Vend.r", "Brum.r", "Frim.r", "Niv.ô", "Pluv.ô", "Vent.ô", "Germ.l", "Flo.l", "Prai.l", "Mes.or", "Ther.or", "Fru.or", "Ss.cu"]
@@ -40,7 +40,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
     
     /// Returns string as d MMMM
     public func toLongStringNoYear() -> String {
-        if components.month == 13 {
+        if components.month == 13 && !self.options.treatSansculottidesAsAMonth {
             return "\(FrenchRepublicanDate.sansculottidesDayNames[components.day! - 1])"
         }
         return "\(components.day!) \(monthName)"
@@ -48,7 +48,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
     
     /// Returns string as d MMM
     public func toShortString() -> String {
-        if components.month == 13 {
+        if components.month == 13 && !self.options.treatSansculottidesAsAMonth {
             return "\(FrenchRepublicanDate.sansculottidesShortNames[components.day! - 1])"
         }
         return "\(components.day!) \(shortMonthName)"
