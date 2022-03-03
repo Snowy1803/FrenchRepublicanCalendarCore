@@ -132,16 +132,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
     /// Returns the wiktionary or wikipedia page link associated with the day name.
     public var descriptionURL: URL? {
         let wikipediaOverrides = [
-            "Belle de nuit": "Mirabilis_jalapa",
-            "Amaryllis": "Amaryllis_(plante)",
-            "Erable sucré": "%C3%89rable_%C3%A0_sucre",
-            "Perce Neige": "Perce-neige",
-            "Laurier thym": "Viorne_tin",
-            "Thimèle": "Daphn%C3%A9_garou",
-            "Bâton d'or": "Girofl%C3%A9e_des_murailles",
-            "Chamerops": "Chamaerops_humilis",
-            "Épine vinette": "%C3%89pine-vinette",
-            "Verge d'or": "Solidago"
+            "Belle de nuit": "Mirabilis_jalapa", "Amaryllis": "Amaryllis_(plante)", "Erable sucré": "%C3%89rable_%C3%A0_sucre", "Perce Neige": "Perce-neige", "Laurier thym": "Viorne_tin", "Thimèle": "Daphn%C3%A9_garou", "Bâton d'or": "Girofl%C3%A9e_des_murailles", "Chamerops": "Chamaerops_humilis", "Épine vinette": "%C3%89pine-vinette", "Verge d'or": "Solidago"
         ]
         if let override = wikipediaOverrides[dayName] {
             return URL(string: "https://fr.wikipedia.org/wiki/\(override)")
