@@ -64,12 +64,10 @@ public struct FrenchRepublicanDate {
     // MARK: Initializers
     
     /// Creates a Republican Date from the given Gregorian Date
-    /// - Parameter date: the Gregorian Date
-    public init(date: Date, options: FrenchRepublicanDateOptions? = nil) {
-        self.init(date: date, options: options, timeZone: nil)
-    }
-    
-    public init(date: Date, options: FrenchRepublicanDateOptions? = nil, timeZone: TimeZone?) {
+    /// - Parameters
+    ///   - date: The Gregorian Date
+    ///   - timeZone: The time zone; the default time zone if nil
+    public init(date: Date, options: FrenchRepublicanDateOptions? = nil, timeZone: TimeZone? = nil) {
         self.date = date
         if let options = options {
             self.options = options
@@ -92,11 +90,8 @@ public struct FrenchRepublicanDate {
     ///   - minute: Minutes
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
-    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
-        self.init(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: nil)
-    }
-    
-    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil, timeZone: TimeZone?) {
+    ///   - timeZone: The time zone; the default time zone if nil
+    public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil, timeZone: TimeZone? = nil) {
         if let options = options {
             self.options = options
         } else if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
@@ -110,11 +105,11 @@ public struct FrenchRepublicanDate {
     
     /// Logic that converts the `date` value to republican date components. Called by the Gregorian > Republican constructor
     private mutating func dateToFrenchRepublican() {
-        var GregorianCalendar: Calendar = Calendar.gregorian
+        var gregorianCalendar: Calendar = Calendar.gregorian
         if self.timeZone != nil {
-            GregorianCalendar.timeZone = self.timeZone!
+            gregorianCalendar.timeZone = self.timeZone!
         }
-        let gregorian = GregorianCalendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .nanosecond], from: date)
+        let gregorian = gregorianCalendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .nanosecond], from: date)
         
         var year: Int
         var dayOfYear: Int
@@ -226,17 +221,14 @@ internal extension Date {
     ///   - minute: Minute, will directly be copied over
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
+    ///   - timeZone: The time zone; the default time zone if nil
     /// - Note: Library users: use FrenchRepublicanDate.init(dayInYear: ...).date
-    init(dayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) {
-        self.init(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: nil)
-    }
-
-    init(dayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone?) {
-        var GregorianCalendar: Calendar = Calendar.gregorian
+    init(dayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone? = nil) {
+        var gregorianCalendar: Calendar = Calendar.gregorian
         if let timeZone = timeZone {
-            GregorianCalendar.timeZone = timeZone
+            gregorianCalendar.timeZone = timeZone
         }
-        self = GregorianCalendar.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: timeZone))!
+        self = gregorianCalendar.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: timeZone))!
     }
 }
 
@@ -249,15 +241,12 @@ fileprivate extension Date {
     ///   - minute: Minute, will directly be copied over
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
-    /// - Returns: A DateComponents object containing the gregorian year and day of year, with the additional time components copied over.
-    static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) -> DateComponents {
-        Date.dateToGregorian(dayInYear: rDayInYear, year: rYear, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: nil)
-    }
-    
-        static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone?) -> DateComponents {
-        var GregorianCalendar: Calendar = Calendar.gregorian
+    ///   - timeZone: The time zone; the default time zone if nil
+    /// - Returns: A DateComponents object containing the Gregorian year and day of year, with the additional time components copied over.
+        static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone? = nil) -> DateComponents {
+        var gregorianCalendar: Calendar = Calendar.gregorian
         if let timeZone = timeZone {
-            GregorianCalendar.timeZone = timeZone
+            gregorianCalendar.timeZone = timeZone
         }
         
         var gYear: Int
@@ -282,14 +271,14 @@ fileprivate extension Date {
             }
         case .romme:
             // hour: 10 avoids a timezone change issue on 1911-03-11 (9 minutes 21 seconds change)
-            let date = GregorianCalendar.date(from: DateComponents(year: rYear + 2000, day: rDayInYear, hour: 10))!
-            let shifted = GregorianCalendar.date(byAdding: .day, value: -76071, to: date)!
-            gYear = GregorianCalendar.component(.year, from: shifted)
-            gDayOfYear = GregorianCalendar.ordinality(of: .day, in: .year, for: shifted)! - 1
+            let date = gregorianCalendar.date(from: DateComponents(year: rYear + 2000, day: rDayInYear, hour: 10))!
+            let shifted = gregorianCalendar.date(byAdding: .day, value: -76071, to: date)!
+            gYear = gregorianCalendar.component(.year, from: shifted)
+            gDayOfYear = gregorianCalendar.ordinality(of: .day, in: .year, for: shifted)! - 1
             let remdays = (rYear - 1) / 4000
             gDayOfYear.increment(by: -remdays, year: &gYear, daysInYear: \.daysInGregorianYear)
         }
         
-        return DateComponents(calendar: GregorianCalendar, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+        return DateComponents(calendar: gregorianCalendar, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
     }
 }

@@ -73,11 +73,11 @@ public extension DecimalTime {
     }
 
     init(base: Date = Date(), timeZone: TimeZone?) {
-        var GregorianCalendar: Calendar = Calendar.gregorian
+        var gregorianCalendar: Calendar = Calendar.gregorian
         if let timeZone = timeZone {
-            GregorianCalendar.timeZone = timeZone
+            gregorianCalendar.timeZone = timeZone
         }
-        let midnight = GregorianCalendar.startOfDay(for: base)
+        let midnight = gregorianCalendar.startOfDay(for: base)
         self.init(timeSinceMidnight: base.timeIntervalSinceReferenceDate - midnight.timeIntervalSinceReferenceDate)
     }
 }
