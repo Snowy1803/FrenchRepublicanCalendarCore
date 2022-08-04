@@ -21,11 +21,7 @@ public struct FrenchRepublicanDateOptions {
     /// If true, formatted dates in Sansculottides are things like "1 Sansculottides" instead of a holiday name.
     public var treatSansculottidesAsAMonth: Bool
     
-    public init(romanYear: Bool, variant: Variant) {
-        self.init(romanYear: romanYear, variant: variant, treatSansculottidesAsAMonth: false)
-    }
-    
-    public init(romanYear: Bool, variant: Variant, treatSansculottidesAsAMonth: Bool) {
+    public init(romanYear: Bool, variant: Variant, treatSansculottidesAsAMonth: Bool = false) {
         self.romanYear = romanYear
         self.variant = variant
         self.treatSansculottidesAsAMonth = treatSansculottidesAsAMonth
