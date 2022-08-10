@@ -100,7 +100,7 @@ public struct FrenchRepublicanDate {
             self.options = .default
         }
         self.date = Date(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: self.options, timeZone: timeZone)
-        initComponents(dayOfYear: dayInYear - 1, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+        initComponents(dayOfYear: dayInYear - 1, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, timeZone: timeZone)
     }
     
     /// Logic that converts the `date` value to republican date components. Called by the Gregorian > Republican constructor
@@ -108,8 +108,11 @@ public struct FrenchRepublicanDate {
         var gregorianCalendar: Calendar = Calendar.gregorian
         if self.timeZone != nil {
             gregorianCalendar.timeZone = self.timeZone!
+        } else {
+            gregorianCalendar.timeZone = TimeZone.current
         }
-        let gregorian = gregorianCalendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .nanosecond], from: date)
+        var gregorian = gregorianCalendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .nanosecond], from: date)
+        gregorian.timeZone = gregorianCalendar.timeZone
         
         var year: Int
         var dayOfYear: Int
@@ -119,7 +122,7 @@ public struct FrenchRepublicanDate {
             // no idea how it works, but it does
             let gYear = gregorian.year!
             year = gYear - 1791
-            dayOfYear = Calendar.gregorian.ordinality(of: .day, in: .year, for: date)!
+            dayOfYear = gregorianCalendar.ordinality(of: .day, in: .year, for: date)!
             dayOfYear.increment(by: -265, year: &year, daysInYear: \.daysInOriginalRepublicanYear)
             
             if options.variant.isYearSextil(gYear) {
@@ -132,17 +135,17 @@ public struct FrenchRepublicanDate {
             let remdays = (gYear / 100 - 15) * 3 / 4 - 1
             dayOfYear.increment(by: -remdays, year: &year, daysInYear: \.daysInOriginalRepublicanYear)
         case .romme:
-            // we're gonna base us upon the gregorian calendar. Unlike what the documentation says,
-            // dates before 1572 use the julian calendar, so we're shifting to 2001 instead of year 1
-            let shifted = Calendar.gregorian.date(byAdding: .day, value: 76071, to: date)!
-            year = Calendar.gregorian.component(.year, from: shifted) - 2000
-            dayOfYear = Calendar.gregorian.ordinality(of: .day, in: .year, for: shifted)! - 1 // 1 to 0 indexed
+            // we're gonna base us upon the Gregorian calendar. Unlike what the documentation says,
+            // dates before 1572 use the Julian calendar, so we're shifting to 2001 instead of year 1
+            let shifted = gregorianCalendar.date(byAdding: .day, value: 76071, to: date)!
+            year = gregorianCalendar.component(.year, from: shifted) - 2000
+            dayOfYear = gregorianCalendar.ordinality(of: .day, in: .year, for: shifted)! - 1 // 1 to 0 indexed
             // still need to correct for the additional rule every 4000 years
             let remdays = (year - 1) / 4000
             dayOfYear.increment(by: remdays, year: &year, daysInYear: \.daysInRommeRepublicanYear)
         }
         
-        initComponents(dayOfYear: dayOfYear, year: year, hour: gregorian.hour, minute: gregorian.minute, second: gregorian.second, nanosecond: gregorian.nanosecond)
+        initComponents(dayOfYear: dayOfYear, year: year, hour: gregorian.hour, minute: gregorian.minute, second: gregorian.second, nanosecond: gregorian.nanosecond, timeZone: gregorian.timeZone)
     }
     
     /// Initializes the `components` property with the given values
@@ -153,8 +156,8 @@ public struct FrenchRepublicanDate {
     ///   - minute: Minutes
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
-    private mutating func initComponents(dayOfYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
-        self.components = DateComponents(year: year, month: dayOfYear / 30 + 1, day: dayOfYear % 30 + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond, weekday: dayOfYear % 10 + 1, quarter: dayOfYear / 90 + 1, weekOfMonth: dayOfYear % 30 / 10 + 1, weekOfYear: dayOfYear / 10 + 1, yearForWeekOfYear: year)
+    private mutating func initComponents(dayOfYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, timeZone: TimeZone?) {
+        self.components = DateComponents(timeZone: timeZone, year: year, month: dayOfYear / 30 + 1, day: dayOfYear % 30 + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond, weekday: dayOfYear % 10 + 1, quarter: dayOfYear / 90 + 1, weekOfMonth: dayOfYear % 30 / 10 + 1, weekOfYear: dayOfYear / 10 + 1, yearForWeekOfYear: year)
     }
     
     // MARK: Mutating utils
@@ -168,7 +171,7 @@ public struct FrenchRepublicanDate {
 }
 
 fileprivate extension Int {
-    /// If self represents a gregorian year, this returns true if it is bissextil
+    /// If self represents a Gregorian year, this returns true if it is bissextil
     var isBissextil: Bool {
         return ((self % 100 != 0) && (self % 4 == 0)) || self % 400 == 0
     }
@@ -183,7 +186,7 @@ fileprivate extension Int {
         FrenchRepublicanDateOptions.Variant.romme.isYearSextil(self) ? 366 : 365
     }
     
-    /// If self represents a gregorian year, this returns the number of days in it
+    /// If self represents a Gregorian year, this returns the number of days in it
     var daysInGregorianYear: Int {
         isBissextil ? 366 : 365
     }
@@ -225,10 +228,12 @@ internal extension Date {
     /// - Note: Library users: use FrenchRepublicanDate.init(dayInYear: ...).date
     init(dayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone? = nil) {
         var gregorianCalendar: Calendar = Calendar.gregorian
-        if let timeZone = timeZone {
-            gregorianCalendar.timeZone = timeZone
+        if timeZone == nil {
+            gregorianCalendar.timeZone = TimeZone.current
+        } else {
+            gregorianCalendar.timeZone = timeZone!
         }
-        self = gregorianCalendar.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: timeZone))!
+        self = gregorianCalendar.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options, timeZone: timeZone ?? TimeZone.current))!
     }
 }
 
@@ -243,11 +248,9 @@ fileprivate extension Date {
     ///   - nanosecond: Nanosecond, will directly be copied over
     ///   - timeZone: The time zone; the default time zone if nil
     /// - Returns: A DateComponents object containing the Gregorian year and day of year, with the additional time components copied over.
-        static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone? = nil) -> DateComponents {
+    static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions, timeZone: TimeZone) -> DateComponents {
         var gregorianCalendar: Calendar = Calendar.gregorian
-        if let timeZone = timeZone {
-            gregorianCalendar.timeZone = timeZone
-        }
+        gregorianCalendar.timeZone = timeZone
         
         var gYear: Int
         var gDayOfYear: Int
@@ -279,6 +282,6 @@ fileprivate extension Date {
             gDayOfYear.increment(by: -remdays, year: &gYear, daysInYear: \.daysInGregorianYear)
         }
         
-        return DateComponents(calendar: gregorianCalendar, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+        return DateComponents(calendar: gregorianCalendar, timeZone: gregorianCalendar.timeZone, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
     }
 }
