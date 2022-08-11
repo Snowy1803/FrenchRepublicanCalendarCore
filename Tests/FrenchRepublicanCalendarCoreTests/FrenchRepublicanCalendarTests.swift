@@ -86,17 +86,26 @@ class FrenchRepublicanCalendarTests: XCTestCase {
  
         debugPrint(#file, #function, appropriateTimeZone.identifier, appropriateTimeZone.secondsFromGMT() / (60 * 60))
        
-        // Testing 01/01/1 FRC
-        for variant in FrenchRepublicanDateOptions.Variant.allCases {
-            let rawFRCDateOrigin: Date = FrenchRepublicanDate.origin
-            let frcDateOrigin: Date = rawFRCDateOrigin.addingTimeInterval(TimeInterval((appropriateTimeZone).secondsFromGMT(for: rawFRCDateOrigin)))
-            let frcDate: FrenchRepublicanDate = FrenchRepublicanDate(date: frcDateOrigin, options: .init(romanYear: false, variant: variant), timeZone: appropriateTimeZone)
-            debugPrint("• Variant:", variant)
-            debugPrint("• Origin:", df2.string(from: frcDateOrigin))
+        let expectedOriginString = "01/01/1"
+        // Testing 01/01/1 FRC:  Original
+//            let rawFRCDateOrigin: Date = FrenchRepublicanDate.origin
+//            let frcDateOrigin: Date = rawFRCDateOrigin.addingTimeInterval(TimeInterval((appropriateTimeZone).secondsFromGMT(for: rawFRCDateOrigin)))
+        let frcDateOrigin: Date = gregorianDate(era: 1, year: 1792, month: 9, day: 22, hour: 0, minute: 0, second: 0, timeZone: appropriateTimeZone)
+            let frcDate: FrenchRepublicanDate = FrenchRepublicanDate(date: frcDateOrigin, options: .init(romanYear: false, variant: .original), timeZone: appropriateTimeZone)
+            debugPrint("• Variant:  Original")
+            debugPrint("• Origin:", frcDateOrigin)
             debugPrint("• FRC date:", frcDate)
-            let expectedOriginString = "01/01/1"
             XCTAssertEqual(frcDate.toShortenedString(), expectedOriginString)
-        }
+        
+        // Testing 01/01/1 FRC:  Romme
+//        let rawFRCDateOrigin2: Date = FrenchRepublicanDate.origin
+//        let frcDateOrigin2: Date = rawFRCDateOrigin2.addingTimeInterval(TimeInterval((appropriateTimeZone).secondsFromGMT(for: rawFRCDateOrigin2)))
+        let frcDateOrigin2: Date = gregorianDate(era: 1, year: 1792, month: 9, day: 22, hour: 0, minute: 0, second: 0, timeZone: appropriateTimeZone)
+        let frcDate2: FrenchRepublicanDate = FrenchRepublicanDate(date: frcDateOrigin2, options: .init(romanYear: false, variant: .romme), timeZone: appropriateTimeZone)
+        debugPrint("• Variant:  Romme")
+        debugPrint("• Origin:", frcDateOrigin2)
+        debugPrint("• FRC date:", frcDate2)
+        XCTAssertEqual(frcDate2.toShortenedString(), expectedOriginString)
         
         // Testing 18/02/8 FRC
         let expected9November1799String = "1799-11-09"
@@ -127,7 +136,7 @@ class FrenchRepublicanCalendarTests: XCTestCase {
         
         let unixOriginOnFRC2 = FrenchRepublicanDate(dayInYear: (4 - 1) * 30 + 10, year: 178, hour: 0, minute: 0, second: 0, nanosecond: 0, timeZone: appropriateTimeZone)
         let unixOriginOnFRCAsDate2 = unixOriginOnFRC2.date
-        debugPrint("• Origin:", df2.string(from: unixOriginOnFRCAsDate2))
+        debugPrint("• Origin:", unixOriginOnFRCAsDate2)
         debugPrint("• FRC date:", unixOriginOnFRC2)
         debugPrint("• FRC date as ordinary date:", df2.string(from: unixOriginOnFRCAsDate2))
         let unixOriginOnFRCAsDate2AsString = df.string(from: unixOriginOnFRCAsDate2)
@@ -178,7 +187,7 @@ class FrenchRepublicanCalendarTests: XCTestCase {
         testHistoricalDatesFor(Tasmania)
 
         let McMurdo = TimeZone(identifier: "Antarctica/McMurdo")! // +12
-        testHistoricalDatesFor(McMurdo)        
+        testHistoricalDatesFor(McMurdo)
     }
     
     func testCurrentDate() throws {
