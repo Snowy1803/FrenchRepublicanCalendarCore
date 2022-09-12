@@ -46,12 +46,11 @@ public struct DecimalTime {
             Double(hour * 10000 + minute * 100 + second) + remainder
         }
         set {
-            assert((0..<100000).contains(newValue))
-            let decimal = Int(newValue)
+            let decimal = Int(newValue) % 100000 // ignore date changes
             hour = decimal / 10000
             minute = (decimal % 10000) / 100
             second = decimal % 100
-            remainder = newValue - Double(decimal)
+            remainder = (newValue - Double(decimal)).truncatingRemainder(dividingBy: 1)
         }
     }
     
