@@ -66,9 +66,13 @@ public struct DecimalTime {
 }
 
 public extension DecimalTime {
-    /// Initializes a new DecimalTime with the current time
-    init(base: Date = Date()) {
-        let midnight = Calendar.gregorian.startOfDay(for: base)
+    /// Initializes a new DecimalTime with the current time and optional time zone
+    init(base: Date = Date(), timeZone: TimeZone? = nil) {
+        var gregorianCalendar: Calendar = Calendar.gregorian
+        if let timeZone = timeZone {
+            gregorianCalendar.timeZone = timeZone
+        }
+        let midnight = gregorianCalendar.startOfDay(for: base)
         self.init(timeSinceMidnight: base.timeIntervalSinceReferenceDate - midnight.timeIntervalSinceReferenceDate)
     }
 }
