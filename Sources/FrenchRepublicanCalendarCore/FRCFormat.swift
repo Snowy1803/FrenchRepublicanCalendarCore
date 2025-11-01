@@ -129,6 +129,33 @@ extension FRCFormat {
     public static let long = FRCFormat(day: .preferred, year: .long)
     public static let dayMonth = FRCFormat(day: .preferred)
     public static let short = FRCFormat(day: .preferred, dayLength: .short)
-    
+}
+
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+extension FormatStyle where Self == FRCFormat {
+    public static var republicanDate: FRCFormat { FRCFormat() }
+}
+
+extension FRCFormat {
+    public func weekday(_ style: WeekdayFormat) -> Self {
+        var copy = self
+        copy.weekday = style
+        return copy
+    }
+    public func day(_ style: DayFormat) -> Self {
+        var copy = self
+        copy.day = style
+        return copy
+    }
+    public func dayLength(_ style: DayLengthFormat) -> Self {
+        var copy = self
+        copy.dayLength = style
+        return copy
+    }
+    public func year(_ style: YearFormat) -> Self {
+        var copy = self
+        copy.year = style
+        return copy
+    }
 }
 
