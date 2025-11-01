@@ -128,6 +128,27 @@ class FrenchRepublicanCalendarTests: XCTestCase {
         XCTAssertEqual(edit.minuteSI, 7)
         XCTAssertEqual(edit.secondSIPrecise, 51, accuracy: 1e-6)
     }
+    
+    func testFormatter() throws {
+        let randomDate = FrenchRepublicanDate(date: .init(timeIntervalSince1970: 1762023488.74243))
+        XCTAssertEqual(FRCFormat.short.format(randomDate), "9 Brum.r")
+        XCTAssertEqual(FRCFormat.dayMonth.format(randomDate), "9 Brumaire")
+        XCTAssertEqual(FRCFormat.long.format(randomDate), "9 Brumaire An 234")
+        XCTAssertEqual(FRCFormat.veryLong.format(randomDate), "Nonidi 9 Brumaire An 234")
+        XCTAssertEqual(FRCFormat.veryLong.decimalTime(.secondPrecision).format(randomDate), "Nonidi 9 Brumaire An 234 à 8:32:04")
+        XCTAssertEqual(FRCFormat().decimalTime(.subsecondPrecision(3)).format(randomDate), "8:32:04.563")
+        XCTAssertEqual(FRCFormat().day(.dayName).format(randomDate), "Alisier")
+    }
+    
+    func testFormatterSansculottide() throws {
+        let randomDate = FrenchRepublicanDate(date: .init(timeIntervalSince1970: 1758529424.1234))
+        XCTAssertEqual(FRCFormat.short.format(randomDate), "Jr opinion")
+        XCTAssertEqual(FRCFormat.dayMonth.format(randomDate), "Jour de l'opinion")
+        XCTAssertEqual(FRCFormat.long.format(randomDate), "Jour de l'opinion An 233")
+        XCTAssertEqual(FRCFormat.veryLong.format(randomDate), "Jour de l'opinion An 233")
+        XCTAssertEqual(FRCFormat.veryLong.decimalTime(.minutePrecision).format(randomDate), "Jour de l'opinion An 233 à 4:33")
+        XCTAssertEqual(FRCFormat().day(.dayName).format(randomDate), "Opinion")
+    }
 }
 
 extension FrenchRepublicanDateOptions: @retroactive SaveableFrenchRepublicanDateOptions {

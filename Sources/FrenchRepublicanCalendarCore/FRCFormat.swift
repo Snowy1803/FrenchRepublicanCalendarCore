@@ -50,6 +50,17 @@ public enum YearFormat: Codable {
     case long
 }
 
+public enum DecimalTimeFormat: Codable, Hashable {
+    // No time
+    case none
+    // 8:50
+    case minutePrecision
+    // 8:50:42
+    case secondPrecision
+    // 8:50:42.123 (when given 3)
+    case subsecondPrecision(Int)
+}
+
 public struct FRCFormat: Codable, FormatStyle {
     public typealias FormatInput = FrenchRepublicanDate
     public typealias FormatOutput = String
@@ -58,6 +69,7 @@ public struct FRCFormat: Codable, FormatStyle {
     public var day: DayFormat = .none
     public var dayLength: DayLengthFormat = .long
     public var year: YearFormat = .none
+    public var decimalTime: DecimalTimeFormat = .none
     
     func formatWeekday(date: FrenchRepublicanDate) -> String? {
         switch weekday {
@@ -115,12 +127,39 @@ public struct FRCFormat: Codable, FormatStyle {
         }
     }
     
+    func formatTime(date: FrenchRepublicanDate) -> String? {
+        switch decimalTime {
+        case .none:
+            return nil
+        case .minutePrecision:
+            return DecimalTime(base: date.date).hourAndMinuteFormatted
+        case .secondPrecision:
+            return DecimalTime(base: date.date).hourMinuteSecondsFormatted
+        case .subsecondPrecision(let length):
+            let time = DecimalTime(base: date.date)
+            let formatter = NumberFormatter()
+            formatter.locale = .init(identifier: "en-US")
+            formatter.minimumFractionDigits = length
+            formatter.maximumFractionDigits = length
+            return "\(time.hourMinuteSecondsFormatted)\(formatter.string(from: time.remainder as NSNumber)!.dropFirst())"
+        }
+    }
+    
     public func format(_ date: FrenchRepublicanDate) -> String {
-        return [
+        let dateComponent = [
             formatWeekday(date: date),
             formatDay(date: date),
             formatYear(date: date)
         ].compactMap(\.self).joined(separator: " ")
+        let time = formatTime(date: date)
+        switch (dateComponent, time) {
+        case ("", let time?):
+            return "\(time)"
+        case (let dateComponent, let time?):
+            return "\(dateComponent) à \(time)"
+        case (let dateComponent, nil):
+            return dateComponent
+        }
     }
 }
 
@@ -155,6 +194,11 @@ extension FRCFormat {
     public func year(_ style: YearFormat) -> Self {
         var copy = self
         copy.year = style
+        return copy
+    }
+    public func decimalTime(_ style: DecimalTimeFormat) -> Self {
+        var copy = self
+        copy.decimalTime = style
         return copy
     }
 }
