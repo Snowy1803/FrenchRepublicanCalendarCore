@@ -27,31 +27,22 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
 
     /// Returns string as EEEE d MMMM "An" yyyy
     public func toVeryLongString() -> String {
-        if isSansculottides {
-            return toLongString()
-        }
-        return "\(weekdayName) \(toLongString())"
+        FRCFormat.veryLong.format(self)
     }
     
     /// Returns string as d MMMM "An" yyyy
     public func toLongString() -> String {
-        return "\(toLongStringNoYear()) An \(formattedYear)"
+        FRCFormat.long.format(self)
     }
     
     /// Returns string as d MMMM
     public func toLongStringNoYear() -> String {
-        if isSansculottides {
-            return "\(FrenchRepublicanDate.sansculottidesDayNames[components.day! - 1])"
-        }
-        return "\(components.day!) \(monthName)"
+        FRCFormat.dayMonth.format(self)
     }
     
     /// Returns string as d MMM
     public func toShortString() -> String {
-        if isSansculottides {
-            return "\(FrenchRepublicanDate.sansculottidesShortNames[components.day! - 1])"
-        }
-        return "\(components.day!) \(shortMonthName)"
+        FRCFormat.short.format(self)
     }
     
     /// Returns string as dd/MM/yyy
@@ -82,6 +73,16 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
     /// the name of the quarter, or season
     public var quarter: String {
         FrenchRepublicanDate.allQuarters[components.quarter! - 1]
+    }
+    
+    public var sansculottideDayName: String {
+        assert(isSansculottides)
+        return FrenchRepublicanDate.sansculottidesDayNames[components.day! - 1]
+    }
+    
+    public var shortSansculottideDayName: String {
+        assert(isSansculottides)
+        return FrenchRepublicanDate.sansculottidesShortNames[components.day! - 1]
     }
     
     /// the year, formatted according to this converter's options (roman numerals, or simply an interpolated Int)

@@ -130,7 +130,7 @@ class FrenchRepublicanCalendarTests: XCTestCase {
     }
 }
 
-extension FrenchRepublicanDateOptions: SaveableFrenchRepublicanDateOptions {
+extension FrenchRepublicanDateOptions: @retroactive SaveableFrenchRepublicanDateOptions {
     // permits changing the current options, doesn't save it anywhere, for testing
     public static var current: FrenchRepublicanDateOptions = .default
 }
