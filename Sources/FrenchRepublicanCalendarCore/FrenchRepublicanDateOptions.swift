@@ -12,7 +12,7 @@
 
 import Foundation
 
-public struct FrenchRepublicanDateOptions {
+public struct FrenchRepublicanDateOptions: Hashable {
     public static let `default` = FrenchRepublicanDateOptions(romanYear: false, variant: .original)
     
     public var romanYear: Bool

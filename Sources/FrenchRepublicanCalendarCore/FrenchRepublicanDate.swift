@@ -12,7 +12,7 @@
 
 import Foundation
 
-public struct FrenchRepublicanDate {
+public struct FrenchRepublicanDate: Hashable {
     
     // MARK: Static: Origin and Maximum
     
