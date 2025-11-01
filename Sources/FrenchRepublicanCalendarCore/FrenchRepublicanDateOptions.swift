@@ -17,10 +17,12 @@ public struct FrenchRepublicanDateOptions {
     
     public var romanYear: Bool
     public var variant: Variant
+    public var timeZone: TimeZone? = nil
     
-    public init(romanYear: Bool, variant: Variant) {
+    public init(romanYear: Bool, variant: Variant, timeZone: TimeZone? = nil) {
         self.romanYear = romanYear
         self.variant = variant
+        self.timeZone = timeZone
     }
     
     public enum Variant: Int, CaseIterable {
@@ -50,5 +52,25 @@ extension FrenchRepublicanDateOptions.Variant: CustomStringConvertible {
         case .original: return "Original"
         case .romme: return "Romme"
         }
+    }
+}
+
+extension TimeZone {
+    /// The meridional time of Paris, used in France until 1911
+    public static var parisMeridian: TimeZone {
+        TimeZone(secondsFromGMT: 9 * 60 + 21)!
+    }
+}
+
+extension FrenchRepublicanDateOptions {
+    public var currentTimeZone: TimeZone {
+        self.timeZone ?? TimeZone.autoupdatingCurrent
+    }
+    
+    public var gregorianCalendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "fr_FR")
+        calendar.timeZone = self.currentTimeZone
+        return calendar
     }
 }
