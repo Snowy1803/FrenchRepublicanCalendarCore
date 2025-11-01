@@ -27,7 +27,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
 
     /// Returns string as EEEE d MMMM "An" yyyy
     public func toVeryLongString() -> String {
-        if components.month == 13 {
+        if isSansculottides {
             return toLongString()
         }
         return "\(weekdayName) \(toLongString())"
@@ -40,7 +40,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
     
     /// Returns string as d MMMM
     public func toLongStringNoYear() -> String {
-        if components.month == 13 {
+        if isSansculottides {
             return "\(FrenchRepublicanDate.sansculottidesDayNames[components.day! - 1])"
         }
         return "\(components.day!) \(monthName)"
@@ -48,7 +48,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
     
     /// Returns string as d MMM
     public func toShortString() -> String {
-        if components.month == 13 {
+        if isSansculottides {
             return "\(FrenchRepublicanDate.sansculottidesShortNames[components.day! - 1])"
         }
         return "\(components.day!) \(shortMonthName)"

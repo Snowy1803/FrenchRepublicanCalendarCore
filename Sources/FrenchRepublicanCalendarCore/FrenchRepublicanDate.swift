@@ -59,6 +59,10 @@ public struct FrenchRepublicanDate {
         return options.variant.isYearSextil(components.year!)
     }
     
+    public var isSansculottides: Bool {
+        return components.month == 13
+    }
+    
     // MARK: Initializers
     
     /// Creates a Republican Date from the given Gregorian Date
