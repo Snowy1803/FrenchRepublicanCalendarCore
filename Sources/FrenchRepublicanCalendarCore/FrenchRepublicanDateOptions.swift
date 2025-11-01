@@ -73,16 +73,22 @@ extension FrenchRepublicanDateOptions {
         calendar.timeZone = self.currentTimeZone
         return calendar
     }
+    
+    internal static func resolve(_ options: Self?) -> Self {
+        if let options = options {
+            return options
+        } else if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
+            return type.current
+        } else {
+            return .default
+        }
+    }
 }
 
 extension Calendar {
     /// Note: this depends on the current or default options — use options.gregorianCalendar to customize the TimeZone used by this calendar
     public static let gregorian: Calendar = {
-        let options = if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
-            type.current
-        } else {
-            FrenchRepublicanDateOptions.default
-        }
+        let options = FrenchRepublicanDateOptions.resolve(nil)
         return options.gregorianCalendar
     }()
 }

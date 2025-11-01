@@ -128,15 +128,15 @@ public struct FRCFormat: Codable, FormatStyle {
     }
     
     func formatTime(date: FrenchRepublicanDate) -> String? {
+        let time = DecimalTime(base: date.date, options: date.options)
         switch decimalTime {
         case .none:
             return nil
         case .minutePrecision:
-            return DecimalTime(base: date.date).hourAndMinuteFormatted
+            return time.hourAndMinuteFormatted
         case .secondPrecision:
-            return DecimalTime(base: date.date).hourMinuteSecondsFormatted
+            return time.hourMinuteSecondsFormatted
         case .subsecondPrecision(let length):
-            let time = DecimalTime(base: date.date)
             let formatter = NumberFormatter()
             formatter.locale = .init(identifier: "en-US")
             formatter.minimumFractionDigits = length

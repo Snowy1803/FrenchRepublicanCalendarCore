@@ -17,6 +17,7 @@ class FrenchRepublicanCalendarTests: XCTestCase {
     
     override func setUp() {
         FrenchRepublicanDateOptions.current = .default
+        FrenchRepublicanDateOptions.current.timeZone = TimeZone(identifier: "Europe/Paris")
     }
 
     func testDateLinearity() throws {

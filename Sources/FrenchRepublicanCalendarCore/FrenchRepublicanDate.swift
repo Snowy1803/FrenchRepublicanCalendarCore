@@ -69,13 +69,7 @@ public struct FrenchRepublicanDate {
     /// - Parameter date: the Gregorian Date
     public init(date: Date, options: FrenchRepublicanDateOptions? = nil) {
         self.date = date
-        if let options = options {
-            self.options = options
-        } else if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
-            self.options = type.current
-        } else {
-            self.options = .default
-        }
+        self.options = .resolve(options)
         dateToFrenchRepublican()
     }
     
