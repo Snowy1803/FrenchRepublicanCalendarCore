@@ -197,15 +197,6 @@ fileprivate extension Int {
     }
 }
 
-@available(*, deprecated, renamed: "FrenchRepublicanDateOptions.gregorianCalendar", message: "The used calendar depends on the TimeZone in the options")
-extension Calendar {
-    public static let gregorian: Calendar = {
-        var cal = Calendar(identifier: .gregorian)
-        cal.locale = Locale(identifier: "fr-FR")
-        return cal
-    }()
-}
-
 internal extension Date {
     /// Creates a Date from the given Republican date components
     /// - Parameters:

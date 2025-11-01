@@ -74,3 +74,15 @@ extension FrenchRepublicanDateOptions {
         return calendar
     }
 }
+
+extension Calendar {
+    /// Note: this depends on the current or default options — use options.gregorianCalendar to customize the TimeZone used by this calendar
+    public static let gregorian: Calendar = {
+        let options = if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
+            type.current
+        } else {
+            FrenchRepublicanDateOptions.default
+        }
+        return options.gregorianCalendar
+    }()
+}
