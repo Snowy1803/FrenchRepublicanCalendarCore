@@ -12,7 +12,7 @@
 
 import Foundation
 
-public struct DecimalTime {
+public struct DecimalTime: Hashable {
     /// The TimeInterval (number of SI seconds) for a decimal second
     public static let decimalSecond: TimeInterval = 0.864
     public static let midnight = DecimalTime(hour: 0, minute: 0, second: 0, remainder: 0)
