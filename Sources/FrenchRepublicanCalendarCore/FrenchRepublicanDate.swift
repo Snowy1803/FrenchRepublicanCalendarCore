@@ -73,7 +73,20 @@ public struct FrenchRepublicanDate: Hashable {
         dateToFrenchRepublican()
     }
     
-    /// Creates a Republican Date from Republican Date component. The `date` property will contain the Gregorian value, so this converts from Republican to Gregorian
+    /// Creates a Republican Date from Republican Date components. The `date` property will contain the Gregorian value, so this converts from Republican to Gregorian
+    /// - Parameters:
+    ///   - day: Day in Month, 1-indexed
+    ///   - month: Month, 1-indexed
+    ///   - year: The republican Year
+    ///   - hour: Hour
+    ///   - minute: Minutes
+    ///   - second: Seconds
+    ///   - nanosecond: Nanoseconds
+    public init(day: Int, month: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
+        self.init(dayInYear: (month - 1) * 30 + day, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+    }
+    
+    /// Creates a Republican Date from Republican Date components. The `date` property will contain the Gregorian value, so this converts from Republican to Gregorian
     /// - Parameters:
     ///   - dayInYear: Day in Year, 1-indexed
     ///   - year: The republican Year
