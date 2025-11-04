@@ -150,12 +150,12 @@ extension FormatStyle where Self == FRCFormat {
 }
 
 extension FRCFormat {
-    public func weekday(_ style: WeekdayFormat) -> Self {
+    public func weekday(_ style: WeekdayFormat = .long) -> Self {
         var copy = self
         copy.weekday = style
         return copy
     }
-    public func day(_ style: DayFormat) -> Self {
+    public func day(_ style: DayFormat = .preferred) -> Self {
         var copy = self
         copy.day = style
         return copy
@@ -165,15 +165,29 @@ extension FRCFormat {
         copy.dayLength = style
         return copy
     }
-    public func year(_ style: YearFormat) -> Self {
+    public func year(_ style: YearFormat = .long) -> Self {
         var copy = self
         copy.year = style
         return copy
     }
-    public func decimalTime(_ style: DecimalTimePrecision) -> Self {
+    public func hour(_ style: HourFormat = .default) -> Self {
         var copy = self
-        copy.decimalTime.precision = style
+        copy.decimalTime.hour = style
+        return copy
+    }
+    public func minute(_ style: MinuteFormat = .default) -> Self {
+        var copy = self
+        copy.decimalTime.minute = style
+        return copy
+    }
+    public func second(_ style: SecondFormat = .default) -> Self {
+        var copy = self
+        copy.decimalTime.second = style
+        return copy
+    }
+    public func subsecond(_ style: SubSecondFormat) -> Self {
+        var copy = self
+        copy.decimalTime.subsecond = style
         return copy
     }
 }
-

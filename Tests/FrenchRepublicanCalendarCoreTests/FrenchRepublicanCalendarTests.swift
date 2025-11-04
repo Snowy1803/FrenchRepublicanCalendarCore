@@ -136,8 +136,8 @@ class FrenchRepublicanCalendarTests: XCTestCase {
         XCTAssertEqual(FRCFormat.dayMonth.format(randomDate), "9 Brumaire")
         XCTAssertEqual(FRCFormat.long.format(randomDate), "9 Brumaire An 234")
         XCTAssertEqual(FRCFormat.veryLong.format(randomDate), "Nonidi 9 Brumaire An 234")
-        XCTAssertEqual(FRCFormat.veryLong.decimalTime(.secondPrecision).format(randomDate), "Nonidi 9 Brumaire An 234 à 8:32:04")
-        XCTAssertEqual(FRCFormat().decimalTime(.subsecondPrecision(3)).format(randomDate), "8:32:04.563")
+        XCTAssertEqual(FRCFormat.veryLong.hour().minute().second().format(randomDate), "Nonidi 9 Brumaire An 234 à 8:32:04")
+        XCTAssertEqual(FRCFormat().hour().minute().second().subsecond(.precision(3)).format(randomDate), "8:32:04.563")
         XCTAssertEqual(FRCFormat().day(.dayName).format(randomDate), "Alisier")
     }
     
@@ -147,7 +147,7 @@ class FrenchRepublicanCalendarTests: XCTestCase {
         XCTAssertEqual(FRCFormat.dayMonth.format(randomDate), "Jour de l'opinion")
         XCTAssertEqual(FRCFormat.long.format(randomDate), "Jour de l'opinion An 233")
         XCTAssertEqual(FRCFormat.veryLong.format(randomDate), "Jour de l'opinion An 233")
-        XCTAssertEqual(FRCFormat.veryLong.decimalTime(.minutePrecision).format(randomDate), "Jour de l'opinion An 233 à 4:33")
+        XCTAssertEqual(FRCFormat.veryLong.hour().minute().format(randomDate), "Jour de l'opinion An 233 à 4:33")
         XCTAssertEqual(FRCFormat().day(.dayName).format(randomDate), "Opinion")
     }
 }

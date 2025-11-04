@@ -23,27 +23,90 @@ public enum DecimalTimePrecision: Codable, Hashable {
     case subsecondPrecision(Int)
 }
 
+public enum DecimalTimeComponentFormat: Codable, Hashable {
+    // None
+    case none
+    // 8
+    case short
+    // 08
+    case long
+    // short (hour) or long (minute and second)
+    case `default`
+}
+
+public typealias HourFormat = DecimalTimeComponentFormat
+public typealias MinuteFormat = DecimalTimeComponentFormat
+public typealias SecondFormat = DecimalTimeComponentFormat
+
+public enum SubSecondFormat: Codable, Hashable {
+    // No subsecond
+    case none
+    // .xxx (n digits)
+    case precision(Int)
+}
+
 public struct DecimalTimeFormat: Codable, FormatStyle {
     public typealias FormatInput = DecimalTime
     public typealias FormatOutput = String
     
-    public var precision: DecimalTimePrecision = .none
+    public var hour: HourFormat = .none
+    public var minute: MinuteFormat = .none
+    public var second: SecondFormat = .none
+    public var subsecond: SubSecondFormat = .none
     
-    public func format(_ time: DecimalTime) -> String {
-        switch precision {
+    public func formatHour(_ time: DecimalTime) -> String? {
+        switch hour {
         case .none:
+            return nil
+        case .short, .default:
+            return "\(time.hour)"
+        case .long:
+            return String("0\(time.hour)".suffix(2))
+        }
+    }
+    
+    public func formatMinute(_ time: DecimalTime) -> String? {
+        switch minute {
+        case .none:
+            return nil
+        case .short:
+            return "\(time.minute)"
+        case .long, .default:
+            return String("0\(time.minute)".suffix(2))
+        }
+    }
+    
+    public func formatSecond(_ time: DecimalTime) -> String? {
+        switch second {
+        case .none:
+            return nil
+        case .short:
+            return "\(time.second)"
+        case .long, .default:
+            return String("0\(time.second)".suffix(2))
+        }
+    }
+    
+    public func formatSubSecond(_ time: DecimalTime) -> String {
+        switch subsecond {
+        case .none, .precision(0):
             return ""
-        case .minutePrecision:
-            return time.hourAndMinuteFormatted
-        case .secondPrecision:
-            return time.hourMinuteSecondsFormatted
-        case .subsecondPrecision(let length):
+        case .precision(let length):
             let formatter = NumberFormatter()
             formatter.locale = .init(identifier: "en-US")
             formatter.minimumFractionDigits = length
             formatter.maximumFractionDigits = length
-            return "\(time.hourMinuteSecondsFormatted)\(formatter.string(from: time.remainder as NSNumber)!.dropFirst())"
+            return "\(formatter.string(from: time.remainder as NSNumber)!.dropFirst())"
         }
+    }
+    
+    public func format(_ time: DecimalTime) -> String {
+        let components: String = [
+            formatHour(time),
+            formatMinute(time),
+            formatSecond(time)
+        ].compactMap { $0 }.joined(separator: ":")
+        return components + formatSubSecond(time)
     }
 }
 
@@ -53,10 +116,27 @@ extension FormatStyle where Self == DecimalTimeFormat {
 }
 
 extension DecimalTimeFormat {
-    public func precision(_ style: DecimalTimePrecision) -> Self {
+    public func hour(_ style: HourFormat = .default) -> Self {
         var copy = self
-        copy.precision = style
+        copy.hour = style
+        return copy
+    }
+
+    public func minute(_ style: MinuteFormat = .default) -> Self {
+        var copy = self
+        copy.minute = style
+        return copy
+    }
+
+    public func second(_ style: SecondFormat = .default) -> Self {
+        var copy = self
+        copy.second = style
+        return copy
+    }
+
+    public func subsecond(_ style: SubSecondFormat) -> Self {
+        var copy = self
+        copy.subsecond = style
         return copy
     }
 }
-
