@@ -60,7 +60,12 @@ public struct FrenchRepublicanDate: Hashable {
     
     /// true if the current Republican year is sextil, false otherwise
     public var isYearSextil: Bool {
-        options.variant.isYearSextil(components.year!)
+        options.variant.impl.isYearSextil(year)
+    }
+    
+    /// The number of days in this year
+    public var dayCountThisYear: Int {
+        options.variant.impl.daysInYear(for: year)
     }
     
     public var isSansculottides: Bool {
