@@ -12,7 +12,7 @@
 
 import Foundation
 
-public enum WeekdayFormat: Codable {
+public enum WeekdayFormat: Codable, Sendable {
     // No weekday
     case none
     // Weekday, except sansculottides
@@ -21,7 +21,7 @@ public enum WeekdayFormat: Codable {
     case always
 }
 
-public enum DayFormat: Codable {
+public enum DayFormat: Codable, Sendable {
     // No day
     case none
     // Véndémiaire or Sansculottides
@@ -32,14 +32,14 @@ public enum DayFormat: Codable {
     case preferred
 }
 
-public enum DayLengthFormat: Codable {
+public enum DayLengthFormat: Codable, Sendable {
     // 5 Vend.r or Jr vertu
     case short
     // 5 Véndémiaire or Jour de la vertu
     case long
 }
 
-public enum YearFormat: Codable {
+public enum YearFormat: Codable, Sendable {
     // No year
     case none
     // XXX
@@ -48,7 +48,7 @@ public enum YearFormat: Codable {
     case long
 }
 
-public struct FRCFormat: Codable, FormatStyle {
+public struct FRCFormat: Codable, FormatStyle, Sendable {
     public typealias FormatInput = FrenchRepublicanDate
     public typealias FormatOutput = String
     

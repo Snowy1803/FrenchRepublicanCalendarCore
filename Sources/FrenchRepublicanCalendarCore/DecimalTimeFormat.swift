@@ -12,7 +12,7 @@
 
 import Foundation
 
-public enum DecimalTimeComponentFormat: Codable, Hashable {
+public enum DecimalTimeComponentFormat: Codable, Hashable, Sendable {
     // None
     case none
     // 8
@@ -27,14 +27,14 @@ public typealias HourFormat = DecimalTimeComponentFormat
 public typealias MinuteFormat = DecimalTimeComponentFormat
 public typealias SecondFormat = DecimalTimeComponentFormat
 
-public enum SubSecondFormat: Codable, Hashable {
+public enum SubSecondFormat: Codable, Hashable, Sendable {
     // No subsecond
     case none
     // .xxx (n digits)
     case precision(Int)
 }
 
-public struct DecimalTimeFormat: Codable, FormatStyle {
+public struct DecimalTimeFormat: Codable, FormatStyle, Sendable {
     public typealias FormatInput = DecimalTime
     public typealias FormatOutput = String
     

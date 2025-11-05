@@ -12,7 +12,7 @@
 
 import Foundation
 
-public struct FrenchRepublicanDateOptions: Hashable {
+public struct FrenchRepublicanDateOptions: Hashable, Sendable {
     public static let `default` = FrenchRepublicanDateOptions(romanYear: false, variant: .original)
     
     public var romanYear: Bool
@@ -25,7 +25,7 @@ public struct FrenchRepublicanDateOptions: Hashable {
         self.timeZone = timeZone
     }
     
-    public enum Variant: Int, CaseIterable {
+    public enum Variant: Int, CaseIterable, Sendable {
         case original
         case romme
     }

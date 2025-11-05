@@ -51,11 +51,6 @@
                BlueprintName = "FrenchRepublicanCalendarCoreTests"
                ReferencedContainer = "container:">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "FrenchRepublicanCalendarTests/testWiktionnaryEntries()">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

@@ -11,82 +11,82 @@
 //
 
 @testable import FrenchRepublicanCalendarCore
-import XCTest
+import Testing
+import Foundation
 
-class FrenchRepublicanCalendarTests: XCTestCase {
-    
-    override func setUp() {
-        FrenchRepublicanDateOptions.current = .default
-        FrenchRepublicanDateOptions.current.timeZone = TimeZone(identifier: "Europe/Paris")
-    }
-
-    func testDateLinearity() throws {
-        for variant in FrenchRepublicanDateOptions.Variant.allCases.reversed() {
-            FrenchRepublicanDateOptions.current.variant = variant
-            var date = FrenchRepublicanDate.origin
-            var prevDay: Int?
-            var prevYear: Int?
-            while date <= FrenchRepublicanDate.maxSafeDate {
-                let frd = FrenchRepublicanDate(date: date)
-                
-                if let prevDay = prevDay,
-                   let prevYear = prevYear {
-                    if frd.dayInYear == 1 {
-                        XCTAssert(prevDay == (variant.isYearSextil(prevYear) ? 366 : 365), "Year ends after \(prevDay) days: \(frd.toLongString())")
-                        XCTAssert(frd.components.year! - prevYear == 1, "Year wasn't incremented: \(frd.toLongString())")
-                    } else {
-                        XCTAssert(frd.dayInYear - prevDay == 1, "Invalid \(date) = \(frd.toLongString()) after \(FrenchRepublicanDate(dayInYear: prevDay, year: prevYear).toLongString())")
-                        XCTAssert(frd.components.year! == prevYear, "Year changed without resetting day at \(frd.toLongString())")
-                    }
+@Suite("French Republican Calendar Tests")
+struct FrenchRepublicanCalendarTests {
+    @Test("Date linearity across all variants", arguments: FrenchRepublicanDateOptions.Variant.allCases)
+    func dateLinearity(variant: FrenchRepublicanDateOptions.Variant) throws {
+        var options = FrenchRepublicanDateOptions.current
+        options.variant = variant
+        var date = FrenchRepublicanDate.origin
+        var prevDay: Int?
+        var prevYear: Int?
+        while date <= FrenchRepublicanDate.maxSafeDate {
+            let frd = FrenchRepublicanDate(date: date, options: options)
+            
+            if let prevDay = prevDay,
+               let prevYear = prevYear {
+                if frd.dayInYear == 1 {
+                    #expect(prevDay == (variant.isYearSextil(prevYear) ? 366 : 365), "Year ends after \(prevDay) days: \(frd.toLongString())")
+                    #expect(frd.components.year! - prevYear == 1, "Year wasn't incremented: \(frd.toLongString())")
+                } else {
+                    #expect(frd.dayInYear - prevDay == 1, "Invalid \(date) = \(frd.toLongString()) after \(FrenchRepublicanDate(dayInYear: prevDay, year: prevYear, options: options).toLongString())")
+                    #expect(frd.components.year! == prevYear, "Year changed without resetting day at \(frd.toLongString())")
                 }
-                
-                prevDay = frd.dayInYear
-                prevYear = frd.components.year!
-                
-                let copy = FrenchRepublicanDate(dayInYear: prevDay!, year: prevYear!, hour: frd.components.hour, minute: frd.components.minute, second: frd.components.second, nanosecond: frd.components.nanosecond)
-                
-                XCTAssert(copy.date == date, "Reconversion fails for \(date) = \(frd.toLongString()) ≠ \(copy.date)")
-                
-                date = Calendar.gregorian.date(byAdding: .day, value: 1, to: date)!
             }
-            print("[Variant \(variant)] Tested until (Gregorian):", date)
+            
+            prevDay = frd.dayInYear
+            prevYear = frd.components.year!
+            
+            let copy = FrenchRepublicanDate(dayInYear: prevDay!, year: prevYear!, time: frd.timeSinceMidnight, options: options)
+            
+            #expect(copy.date == date, "Reconversion fails for \(date) = \(frd.toLongString()) ≠ \(copy.date)")
+            
+            date = Calendar.gregorian.date(byAdding: .day, value: 1, to: date)!
         }
+        print("[Variant \(variant)] Tested until (Gregorian):", date)
     }
     
     @available(iOS 10.0, *)
-    func testHistoricalDates() {
+    @Test("Historical dates conversion")
+    func historicalDates() {
         let df = ISO8601DateFormatter()
         df.formatOptions = .withFullDate
         for variant in FrenchRepublicanDateOptions.Variant.allCases {
-            XCTAssertEqual(FrenchRepublicanDate(date: FrenchRepublicanDate.origin, options: .init(romanYear: false, variant: variant)).toShortenedString(), "01/01/1")
+            #expect(FrenchRepublicanDate(date: FrenchRepublicanDate.origin, options: .init(romanYear: false, variant: variant)).toShortenedString() == "01/01/1")
         }
-        XCTAssertEqual(FrenchRepublicanDate(date: df.date(from: "1799-11-09")!).toShortenedString(), "18/02/8")
-        XCTAssertEqual(df.string(from: FrenchRepublicanDate(dayInYear: 49, year: 8).date), "1799-11-09")
+        #expect(FrenchRepublicanDate(date: df.date(from: "1799-11-09")!).toShortenedString() == "18/02/8")
+        #expect(df.string(from: FrenchRepublicanDate(dayInYear: 49, year: 8).date) == "1799-11-09")
     }
     
-    func testCurrentDate() throws {
+    @Test("Current date conversion")
+    func currentDate() throws {
         print(FrenchRepublicanDate(date: Date()))
         print(DecimalTime().debugDescription)
     }
     
-    func testDayCount() throws {
-        XCTAssert(FrenchRepublicanDate.allDayNames.count == 366)
+    @Test("Day count validation")
+    func dayCount() throws {
+        #expect(FrenchRepublicanDate.allDayNames.count == 366)
     }
     
-    func testWiktionnaryEntries() throws {
+    @Test("Wiktionary URL validation", .disabled("Disabled by default"))
+    func wiktionaryEntries() throws {
         let session = URLSession(configuration: .default)
         let semaphore = DispatchSemaphore(value: 0)
         for i in FrenchRepublicanDate.allDayNames.indices {
             guard let url = FrenchRepublicanDate(dayInYear: i + 1, year: 1).descriptionURL else {
-                XCTFail("invalid url for day #\(i): \(FrenchRepublicanDate.allDayNames[i])")
+                Issue.record("invalid url for day #\(i): \(FrenchRepublicanDate.allDayNames[i])")
                 return
             }
             let task = session.dataTask(with: url) { (data, response, error) in
                 guard let response = response as? HTTPURLResponse else {
-                    XCTFail("not http")
+                    Issue.record("not http")
                     return
                 }
-                XCTAssertEqual(response.statusCode, 200, "Day \(i) not found")
+                #expect(response.statusCode == 200, "Day \(i) not found")
                 semaphore.signal()
             }
             task.resume()
@@ -94,65 +94,76 @@ class FrenchRepublicanCalendarTests: XCTestCase {
         }
     }
     
-    func testDecimalTime() throws {
+    @Test("Decimal time conversion and manipulation")
+    func decimalTime() throws {
         let min = DecimalTime(timeSinceMidnight: 0)
-        XCTAssertEqual(min.description, "0:00:00")
-        XCTAssertEqual(min.remainder, 0, accuracy: 1e-6)
+        #expect(min.description == "0:00:00")
+        #expect(abs(min.remainder - 0) < 1e-6)
         
         let max = DecimalTime(timeSinceMidnight: 86400 - DecimalTime.decimalSecond)
-        XCTAssertEqual(max.description, "9:99:99")
-        XCTAssertEqual(max.remainder, 0, accuracy: 1e-6)
+        #expect(max.description == "9:99:99")
+        #expect(abs(max.remainder - 0) < 1e-6)
         
         let mid = DecimalTime(timeSinceMidnight: 86400/2)
-        XCTAssertEqual(mid.description, "5:00:00")
-        XCTAssertEqual(mid.remainder, 0, accuracy: 1e-6)
+        #expect(mid.description == "5:00:00")
+        #expect(abs(mid.remainder - 0) < 1e-6)
         
         let rand = DecimalTime(timeSinceMidnight: DecimalTime.decimalSecond * 78427.2)
-        XCTAssertEqual(rand.description, "7:84:27")
-        XCTAssertEqual(rand.remainder, 0.2, accuracy: 1e-6)
-        XCTAssertEqual(rand.decimalTime, 78427.2, accuracy: 1e-6)
+        #expect(rand.description == "7:84:27")
+        #expect(abs(rand.remainder - 0.2) < 1e-6)
+        #expect(abs(rand.decimalTime - 78427.2) < 1e-6)
         
         var edit = DecimalTime(timeSinceMidnight: 3601)
-        XCTAssertEqual(edit.hourSI, 1)
-        XCTAssertEqual(edit.minuteSI, 0)
-        XCTAssertEqual(edit.secondSIPrecise, 1, accuracy: 1e-6)
+        #expect(edit.hourSI == 1)
+        #expect(edit.minuteSI == 0)
+        #expect(abs(edit.secondSIPrecise - 1) < 1e-6)
         edit.minuteSI = 7
-        XCTAssertEqual(edit.hourSI, 1)
-        XCTAssertEqual(edit.minuteSI, 7)
-        XCTAssertEqual(edit.secondSIPrecise, 1, accuracy: 1e-6)
+        #expect(edit.hourSI == 1)
+        #expect(edit.minuteSI == 7)
+        #expect(abs(edit.secondSIPrecise - 1) < 1e-6)
         edit.hourSI = 3
-        XCTAssertEqual(edit.hourSI, 3)
-        XCTAssertEqual(edit.minuteSI, 7)
-        XCTAssertEqual(edit.secondSIPrecise, 1, accuracy: 1e-6)
+        #expect(edit.hourSI == 3)
+        #expect(edit.minuteSI == 7)
+        #expect(abs(edit.secondSIPrecise - 1) < 1e-6)
         edit.secondSI = 51
-        XCTAssertEqual(edit.hourSI, 3)
-        XCTAssertEqual(edit.minuteSI, 7)
-        XCTAssertEqual(edit.secondSIPrecise, 51, accuracy: 1e-6)
+        #expect(edit.hourSI == 3)
+        #expect(edit.minuteSI == 7)
+        #expect(abs(edit.secondSIPrecise - 51) < 1e-6)
     }
     
-    func testFormatter() throws {
+    @Test("Date formatter with various formats")
+    func formatter() throws {
         let randomDate = FrenchRepublicanDate(date: .init(timeIntervalSince1970: 1762023488.74243))
-        XCTAssertEqual(FRCFormat.short.format(randomDate), "9 Brum.r")
-        XCTAssertEqual(FRCFormat.dayMonth.format(randomDate), "9 Brumaire")
-        XCTAssertEqual(FRCFormat.long.format(randomDate), "9 Brumaire An 234")
-        XCTAssertEqual(FRCFormat.veryLong.format(randomDate), "Nonidi 9 Brumaire An 234")
-        XCTAssertEqual(FRCFormat.veryLong.hour().minute().second().format(randomDate), "Nonidi 9 Brumaire An 234 à 8:32:04")
-        XCTAssertEqual(FRCFormat().hour().minute().second().subsecond(.precision(3)).format(randomDate), "8:32:04.563")
-        XCTAssertEqual(FRCFormat().day(.dayName).format(randomDate), "Alisier")
+        #expect(FRCFormat.short.format(randomDate) == "9 Brum.r")
+        #expect(FRCFormat.dayMonth.format(randomDate) == "9 Brumaire")
+        #expect(FRCFormat.long.format(randomDate) == "9 Brumaire An 234")
+        #expect(FRCFormat.veryLong.format(randomDate) == "Nonidi 9 Brumaire An 234")
+        #expect(FRCFormat.veryLong.hour().minute().second().format(randomDate) == "Nonidi 9 Brumaire An 234 à 8:32:04")
+        #expect(FRCFormat().hour().minute().second().subsecond(.precision(3)).format(randomDate) == "8:32:04.563")
+        #expect(FRCFormat().day(.dayName).format(randomDate) == "Alisier")
     }
     
-    func testFormatterSansculottide() throws {
+    @Test("Formatter with sansculottide dates")
+    func formatterSansculottide() throws {
         let randomDate = FrenchRepublicanDate(date: .init(timeIntervalSince1970: 1758529424.1234))
-        XCTAssertEqual(FRCFormat.short.format(randomDate), "Jr opinion")
-        XCTAssertEqual(FRCFormat.dayMonth.format(randomDate), "Jour de l'opinion")
-        XCTAssertEqual(FRCFormat.long.format(randomDate), "Jour de l'opinion An 233")
-        XCTAssertEqual(FRCFormat.veryLong.format(randomDate), "Jour de l'opinion An 233")
-        XCTAssertEqual(FRCFormat.veryLong.hour().minute().format(randomDate), "Jour de l'opinion An 233 à 4:33")
-        XCTAssertEqual(FRCFormat().day(.dayName).format(randomDate), "Opinion")
+        #expect(FRCFormat.short.format(randomDate) == "Jr opinion")
+        #expect(FRCFormat.dayMonth.format(randomDate) == "Jour de l'opinion")
+        #expect(FRCFormat.long.format(randomDate) == "Jour de l'opinion An 233")
+        #expect(FRCFormat.veryLong.format(randomDate) == "Jour de l'opinion An 233")
+        #expect(FRCFormat.veryLong.hour().minute().format(randomDate) == "Jour de l'opinion An 233 à 4:33")
+        #expect(FRCFormat().day(.dayName).format(randomDate) == "Opinion")
     }
 }
 
-extension FrenchRepublicanDateOptions: @retroactive SaveableFrenchRepublicanDateOptions {
-    // permits changing the current options, doesn't save it anywhere, for testing
-    public static var current: FrenchRepublicanDateOptions = .default
+extension FrenchRepublicanDateOptions: SaveableFrenchRepublicanDateOptions {
+    // just changes the default time zone for the tests
+    public static var current: FrenchRepublicanDateOptions {
+        get {
+            var value = Self.default
+            value.timeZone = TimeZone(identifier: "Europe/Paris")
+            return value
+        }
+        @available(*, deprecated, message: "Unsupported")
+        set {}
+    }
 }
