@@ -109,38 +109,9 @@ public struct FrenchRepublicanDate: Hashable {
     /// Logic that converts the `date` value to republican date components. Called by the Gregorian > Republican constructor
     private mutating func dateToFrenchRepublican() {
         let gregorianCalendar = options.gregorianCalendar
-        let gregorian = gregorianCalendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .nanosecond], from: date)
+        let gregorian = gregorianCalendar.dateComponents([.hour, .minute, .second, .nanosecond], from: date)
         
-        var year: Int
-        var dayOfYear: Int
-        
-        switch options.variant {
-        case .original:
-            // no idea how it works, but it does
-            let gYear = gregorian.year!
-            year = gYear - 1791
-            dayOfYear = gregorianCalendar.ordinality(of: .day, in: .year, for: date)!
-            dayOfYear.increment(by: -265, year: &year, daysInYear: \.daysInOriginalRepublicanYear)
-            
-            if options.variant.isYearSextil(gYear) {
-                dayOfYear.increment(by: -1, year: &year, daysInYear: \.daysInOriginalRepublicanYear)
-            }
-            if (gYear).isBissextil {
-                dayOfYear.increment(by: -1, year: &year, daysInYear: \.daysInOriginalRepublicanYear)
-            }
-            
-            let remdays = (gYear / 100 - 15) * 3 / 4 - 1
-            dayOfYear.increment(by: -remdays, year: &year, daysInYear: \.daysInOriginalRepublicanYear)
-        case .romme:
-            // we're gonna base us upon the gregorian calendar. Unlike what the documentation says,
-            // dates before 1572 use the julian calendar, so we're shifting to 2001 instead of year 1
-            let shifted = gregorianCalendar.date(byAdding: .day, value: 76071, to: date)!
-            year = gregorianCalendar.component(.year, from: shifted) - 2000
-            dayOfYear = gregorianCalendar.ordinality(of: .day, in: .year, for: shifted)! - 1 // 1 to 0 indexed
-            // still need to correct for the additional rule every 4000 years
-            let remdays = (year - 1) / 4000
-            dayOfYear.increment(by: remdays, year: &year, daysInYear: \.daysInRommeRepublicanYear)
-        }
+        let (dayOfYear, year) = options.variant.impl.convertToRepublican(gregorian: date, in: gregorianCalendar)
         
         initComponents(dayOfYear: dayOfYear, year: year, hour: gregorian.hour, minute: gregorian.minute, second: gregorian.second, nanosecond: gregorian.nanosecond)
     }
