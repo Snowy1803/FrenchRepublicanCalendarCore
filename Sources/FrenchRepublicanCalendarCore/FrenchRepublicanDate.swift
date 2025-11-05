@@ -51,16 +51,28 @@ public struct FrenchRepublicanDate: Hashable {
     
     /// The day in year date component, 1-indexed
     public var dayInYear: Int {
-        return (components.month! - 1) * 30 + components.day!
+        (components.month! - 1) * 30 + components.day!
+    }
+    
+    public var year: Int {
+        components.year!
     }
     
     /// true if the current Republican year is sextil, false otherwise
     public var isYearSextil: Bool {
-        return options.variant.isYearSextil(components.year!)
+        options.variant.isYearSextil(components.year!)
     }
     
     public var isSansculottides: Bool {
-        return components.month == 13
+        components.month == 13
+    }
+    
+    public var timeSinceMidnight: TimeInterval {
+        date.timeIntervalSince(options.gregorianCalendar.startOfDay(for: date))
+    }
+    
+    public var decimalTime: DecimalTime {
+        DecimalTime(timeSinceMidnight: timeSinceMidnight)
     }
     
     // MARK: Initializers
@@ -83,8 +95,20 @@ public struct FrenchRepublicanDate: Hashable {
     ///   - minute: Minutes
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
+    ///   - options: The options (variant, time zone) to use
     public init(day: Int, month: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
-        self.init(dayInYear: (month - 1) * 30 + day, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+        self.init(dayInYear: (month - 1) * 30 + day, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options)
+    }
+    
+    /// Creates a Republican Date from Republican Date components. The `date` property will contain the Gregorian value, so this converts from Republican to Gregorian
+    /// - Parameters:
+    ///   - day: Day in Month, 1-indexed
+    ///   - month: Month, 1-indexed
+    ///   - year: The republican Year
+    ///   - time: Time in SI seconds since midnight
+    ///   - options: The options (variant, time zone) to use
+    public init(day: Int, month: Int, year: Int, time: TimeInterval, options: FrenchRepublicanDateOptions? = nil) {
+        self.init(dayInYear: (month - 1) * 30 + day, year: year, time: time, options: options)
     }
     
     /// Creates a Republican Date from Republican Date components. The `date` property will contain the Gregorian value, so this converts from Republican to Gregorian
@@ -95,9 +119,22 @@ public struct FrenchRepublicanDate: Hashable {
     ///   - minute: Minutes
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
+    ///   - options: The options (variant, time zone) to use
     public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
         self.options = .resolve(options)
         self.date = Date(republicanDayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: self.options)
+        initComponents(dayOfYear: dayInYear - 1, year: year)
+    }
+    
+    /// Creates a Republican Date from Republican Date components. The `date` property will contain the Gregorian value, so this converts from Republican to Gregorian
+    /// - Parameters:
+    ///   - dayInYear: Day in Year, 1-indexed
+    ///   - year: The republican Year
+    ///   - time: The time in the day, in SI seconds
+    ///   - options: The options (variant, time zone) to use
+    public init(dayInYear: Int, year: Int, time: TimeInterval, options: FrenchRepublicanDateOptions? = nil) {
+        self.options = .resolve(options)
+        self.date = Date(republicanDayInYear: dayInYear, year: year, hour: 0, minute: 0, second: 0, nanosecond: 0, options: self.options) + time
         initComponents(dayOfYear: dayInYear - 1, year: year)
     }
     
@@ -129,13 +166,12 @@ public struct FrenchRepublicanDate: Hashable {
         )
     }
     
-    // MARK: Mutating utils
+    // MARK: Utils
     
     /// Increments the Republican year for this Date. The Gregorian `date` will be recomputed.
+    @available(*, deprecated, message: "Use `value = .init(dayInYear: value.dayInYear, year: value.year + 1)` directly instead")
     public mutating func nextYear() {
-        components.year! += 1
-        components.yearForWeekOfYear! += 1
-        date = Date(republicanDayInYear: dayInYear, year: components.year!, hour: components.hour, minute: components.minute, second: components.second, nanosecond: components.nanosecond, options: options)
+        self = .init(dayInYear: dayInYear, year: components.year! + 1, time: timeSinceMidnight, options: options)
     }
 }
 
