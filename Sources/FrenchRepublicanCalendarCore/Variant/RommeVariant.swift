@@ -30,6 +30,18 @@ struct RommeVariant: RepublicanCalendarVariant {
         
         return (dayOfYear, year)
     }
+    
+    func convertToGregorian(rDayInYear: Int, rYear: Int, in gregorianCalendar: Calendar) -> (dayOfYear: Int, year: Int) {
+        // hour: 10 avoids a timezone change issue on 1911-03-11 (9 minutes 21 seconds change) if we're on an autoupdating timezone (as is the case by default)
+        let date = gregorianCalendar.date(from: DateComponents(year: rYear + 2000, day: rDayInYear, hour: 10))!
+        let shifted = gregorianCalendar.date(byAdding: .day, value: -76071, to: date)!
+        var gYear = gregorianCalendar.component(.year, from: shifted)
+        var gDayOfYear = gregorianCalendar.ordinality(of: .day, in: .year, for: shifted)! - 1
+        let remdays = (rYear - 1) / 4000
+        gregorian.increment(day: &gDayOfYear, by: -remdays, year: &gYear)
+        
+        return (dayOfYear: gDayOfYear, year: gYear)
+    }
 }
 
 extension RepublicanCalendarVariant where Self == RommeVariant {

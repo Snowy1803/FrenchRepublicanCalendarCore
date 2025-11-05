@@ -30,7 +30,7 @@ struct OriginalArticleXVariant: RepublicanCalendarVariant {
         if isYearSextil(gYear) {
             increment(day: &dayOfYear, by: -1, year: &year)
         }
-        if isYearBissextil(gYear) {
+        if gregorian.isYearSextil(gYear) {
             increment(day: &dayOfYear, by: -1, year: &year)
         }
         
@@ -39,12 +39,25 @@ struct OriginalArticleXVariant: RepublicanCalendarVariant {
         
         return (dayOfYear, year)
     }
-}
-
-private extension OriginalArticleXVariant {
-    /// Returns true if the given gregorian year is bisextil
-    func isYearBissextil(_ year: Int) -> Bool {
-        ((year % 100 != 0) && (year % 4 == 0)) || year % 400 == 0
+    
+    func convertToGregorian(rDayInYear: Int, rYear: Int, in gregorianCalendar: Calendar) -> (dayOfYear: Int, year: Int) {
+        var gYear = rYear + 1792
+        var gDayOfYear = rDayInYear
+        gregorian.increment(day: &gDayOfYear, by: -102, year: &gYear)
+        
+        var yt = 0
+        var diff: Int
+        repeat {
+            diff = (gYear / 100 - 15) * 3 / 4 - 1 - yt
+            gregorian.increment(day: &gDayOfYear, by: diff, year: &gYear)
+            yt += diff
+        } while diff != 0
+        
+        if isYearSextil(rYear - 1) && !(gYear % 4 == 0 && !gregorian.isYearSextil(gYear)) {
+            gregorian.increment(day: &gDayOfYear, by: 1, year: &gYear)
+        }
+        
+        return (gDayOfYear, gYear)
     }
 }
 

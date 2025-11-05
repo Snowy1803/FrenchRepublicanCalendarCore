@@ -95,13 +95,7 @@ public struct FrenchRepublicanDate: Hashable {
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
     public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
-        if let options = options {
-            self.options = options
-        } else if let type = FrenchRepublicanDateOptions.self as? SaveableFrenchRepublicanDateOptions.Type {
-            self.options = type.current
-        } else {
-            self.options = .default
-        }
+        self.options = .resolve(options)
         self.date = Date(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: self.options)
         initComponents(dayOfYear: dayInYear - 1, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
     }
@@ -138,43 +132,6 @@ public struct FrenchRepublicanDate: Hashable {
     }
 }
 
-fileprivate extension Int {
-    /// If self represents a gregorian year, this returns true if it is bissextil
-    var isBissextil: Bool {
-        return ((self % 100 != 0) && (self % 4 == 0)) || self % 400 == 0
-    }
-    
-    /// If self represents a republican year in the `.original` variant, this returns the number of days in itself
-    var daysInOriginalRepublicanYear: Int {
-        FrenchRepublicanDateOptions.Variant.original.isYearSextil(self) ? 366 : 365
-    }
-    
-    /// If self represents a republican year in the `.romme` variant, this returns the number of days in itself
-    var daysInRommeRepublicanYear: Int {
-        FrenchRepublicanDateOptions.Variant.romme.isYearSextil(self) ? 366 : 365
-    }
-    
-    /// If self represents a gregorian year, this returns the number of days in it
-    var daysInGregorianYear: Int {
-        isBissextil ? 366 : 365
-    }
-    
-    /// Increments the day component, and if it overflows, updates the year value
-    /// - Parameters:
-    ///   - add: The number of days to add (or remove if negative) to/from ourself
-    ///   - year: The inout year, updated if necessary
-    ///   - daysInYear: A keypath in Int returning an Int: "\.daysInXxxYear"
-    mutating func increment(by add: Int, year: inout Int, daysInYear: KeyPath<Int, Int>) {
-        let division = (self + add).quotientAndRemainder(dividingBy: year[keyPath: daysInYear])
-        self = division.remainder
-        year += division.quotient
-        if self < 0 {
-            year -= 1
-            self += year[keyPath: daysInYear]
-        }
-    }
-}
-
 internal extension Date {
     /// Creates a Date from the given Republican date components
     /// - Parameters:
@@ -201,39 +158,8 @@ fileprivate extension Date {
     ///   - nanosecond: Nanosecond, will directly be copied over
     /// - Returns: A DateComponents object containing the gregorian year and day of year, with the additional time components copied over.
     static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) -> DateComponents {
+        let (gDayOfYear, gYear) = options.variant.impl.convertToGregorian(rDayInYear: rDayInYear, rYear: rYear, in: options.gregorianCalendar)
         
-        var gYear: Int
-        var gDayOfYear: Int
-        
-        let gregorianCalendar = options.gregorianCalendar
-        
-        switch options.variant {
-        case .original:
-            gYear = rYear + 1792
-            gDayOfYear = rDayInYear
-            gDayOfYear.increment(by: -102, year: &gYear, daysInYear: \.daysInGregorianYear)
-            
-            var yt = 0
-            var diff: Int
-            repeat {
-                diff = (gYear / 100 - 15) * 3 / 4 - 1 - yt
-                gDayOfYear.increment(by: diff, year: &gYear, daysInYear: \.daysInGregorianYear)
-                yt += diff
-            } while diff != 0
-            
-            if options.variant.isYearSextil(rYear - 1) && !(gYear % 4 == 0 && !gYear.isBissextil) {
-                gDayOfYear.increment(by: 1, year: &gYear, daysInYear: \.daysInGregorianYear)
-            }
-        case .romme:
-            // hour: 10 avoids a timezone change issue on 1911-03-11 (9 minutes 21 seconds change) if we're on an autoupdating timezone (as is the case by default)
-            let date = gregorianCalendar.date(from: DateComponents(year: rYear + 2000, day: rDayInYear, hour: 10))!
-            let shifted = gregorianCalendar.date(byAdding: .day, value: -76071, to: date)!
-            gYear = gregorianCalendar.component(.year, from: shifted)
-            gDayOfYear = gregorianCalendar.ordinality(of: .day, in: .year, for: shifted)! - 1
-            let remdays = (rYear - 1) / 4000
-            gDayOfYear.increment(by: -remdays, year: &gYear, daysInYear: \.daysInGregorianYear)
-        }
-        
-        return DateComponents(calendar: gregorianCalendar, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+        return DateComponents(calendar: options.gregorianCalendar, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
     }
 }

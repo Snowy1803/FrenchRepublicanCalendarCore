@@ -12,17 +12,26 @@
 
 import Foundation
 
-protocol RepublicanCalendarVariant {
+protocol CalendarVariant {
     /// Returns true if the given year is sextil (6 days in month 13), false otherwise (5 days in month 13)
     func isYearSextil(_ year: Int) -> Bool
+}
+
+protocol RepublicanCalendarVariant: CalendarVariant {
     /// Convert from gregorian to republican calendar
     /// - Parameter date: a gregorian date
     /// - Parameter gregorianCalendar: the gregorian calendar being used, with the right time zone set
     /// - Returns: a tuple with a zero-indexed day in year (0-364/365), and a 1-indexed year number
     func convertToRepublican(gregorian date: Date, in gregorianCalendar: Calendar) -> (dayOfYear: Int, year: Int)
+    /// Convert from republican to gregorian calendar
+    /// - Parameter rDayInYear the day in republican year (1-indexed)
+    /// - Parameter rYear the republican year number (1-indexed) 
+    /// - Parameter gregorianCalendar: the gregorian calendar being used, with the right time zone set
+    /// - Returns: a tuple with a zero-indexed day in year (0-364/365), and a 1-indexed year number
+    func convertToGregorian(rDayInYear: Int, rYear: Int, in gregorianCalendar: Calendar) -> (dayOfYear: Int, year: Int)
 }
 
-extension RepublicanCalendarVariant {
+extension CalendarVariant {
     func daysInYear(for year: Int) -> Int {
         if isYearSextil(year) {
             366
