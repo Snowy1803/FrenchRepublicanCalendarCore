@@ -40,11 +40,11 @@ extension CalendarVariant {
         }
     }
     
-    /// Increments the day component, and if it overflows, updates the year value
+    /// Increments the day component (0-indexed), and if it overflows, updates the year value
     /// - Parameters:
+    ///   - day: The day value to increment
     ///   - add: The number of days to add (or remove if negative) to/from ourself
     ///   - year: The inout year, updated if necessary
-    ///   - daysInYear: A keypath in Int returning an Int: "\.daysInXxxYear"
     func increment(day: inout Int, by add: Int, year: inout Int) {
         let division = (day + add).quotientAndRemainder(dividingBy: daysInYear(for: year))
         day = division.remainder
@@ -53,5 +53,13 @@ extension CalendarVariant {
             year -= 1
             day += daysInYear(for: year)
         }
+    }
+    
+    /// Normalizes a (day/year) combo according to this calendar variant. If the dayInYear is too large or to small, it will overflow to the year.
+    func normalize(dayInYear: Int, year: Int) -> (dayInYear: Int, year: Int) {
+        var dayOfYear = dayInYear - 1
+        var year = year
+        increment(day: &dayOfYear, by: 0, year: &year)
+        return (dayOfYear + 1, year)
     }
 }

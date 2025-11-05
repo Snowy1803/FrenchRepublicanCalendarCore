@@ -121,8 +121,19 @@ public struct FrenchRepublicanDate: Hashable {
     ///   - nanosecond: Nanoseconds
     ///   - options: The options (variant, time zone) to use
     public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
-        self.options = .resolve(options)
-        self.date = Date(republicanDayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: self.options)
+        let options: FrenchRepublicanDateOptions = .resolve(options)
+        self.options = options
+        
+        let (dayInYear, year) = options.variant.impl.normalize(dayInYear: dayInYear, year: year)
+
+        let (gDayOfYear, gYear) = options.variant.impl.convertToGregorian(rDayInYear: dayInYear, rYear: year, in: options.gregorianCalendar)
+        self.date = options.gregorianCalendar.date(from: DateComponents(
+            calendar: options.gregorianCalendar,
+            timeZone: options.timeZone,
+            year: gYear, day: gDayOfYear + 1,
+            hour: hour, minute: minute, second: second, nanosecond: nanosecond
+        ))!
+
         initComponents(dayOfYear: dayInYear - 1, year: year)
     }
     
@@ -133,8 +144,15 @@ public struct FrenchRepublicanDate: Hashable {
     ///   - time: The time in the day, in SI seconds
     ///   - options: The options (variant, time zone) to use
     public init(dayInYear: Int, year: Int, time: TimeInterval, options: FrenchRepublicanDateOptions? = nil) {
-        self.options = .resolve(options)
-        self.date = Date(republicanDayInYear: dayInYear, year: year, hour: 0, minute: 0, second: 0, nanosecond: 0, options: self.options) + time
+        let options: FrenchRepublicanDateOptions = .resolve(options)
+        self.options = options
+        
+        let (dayInYear, year) = options.variant.impl.normalize(dayInYear: dayInYear, year: year)
+
+        let (gDayOfYear, gYear) = options.variant.impl.convertToGregorian(rDayInYear: dayInYear, rYear: year, in: options.gregorianCalendar)
+        let dateComponents = DateComponents(calendar: options.gregorianCalendar, timeZone: options.timeZone, year: gYear, day: gDayOfYear + 1)
+        self.date = options.gregorianCalendar.date(from: dateComponents)!.addingTimeInterval(time)
+
         initComponents(dayOfYear: dayInYear - 1, year: year)
     }
     
@@ -172,22 +190,5 @@ public struct FrenchRepublicanDate: Hashable {
     @available(*, deprecated, message: "Use `value = .init(dayInYear: value.dayInYear, year: value.year + 1)` directly instead")
     public mutating func nextYear() {
         self = .init(dayInYear: dayInYear, year: components.year! + 1, time: timeSinceMidnight, options: options)
-    }
-}
-
-internal extension Date {
-    /// Creates a Date from the given Republican date components
-    /// - Parameters:
-    ///   - dayInYear: Republican Day in Year, 1-indexed
-    ///   - year: Republican Year
-    ///   - hour: Hour, will directly be copied over
-    ///   - minute: Minute, will directly be copied over
-    ///   - second: Second, will directly be copied over
-    ///   - nanosecond: Nanosecond, will directly be copied over
-    /// - Note: Library users: use FrenchRepublicanDate.init(dayInYear: ...).date
-    init(republicanDayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) {
-        let (gDayOfYear, gYear) = options.variant.impl.convertToGregorian(rDayInYear: republicanDayInYear, rYear: year, in: options.gregorianCalendar)
-        let dateComponents = DateComponents(calendar: options.gregorianCalendar, timeZone: options.timeZone, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
-        self = options.gregorianCalendar.date(from: dateComponents)!
     }
 }
