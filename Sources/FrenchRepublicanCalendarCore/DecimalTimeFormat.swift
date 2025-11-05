@@ -12,17 +12,6 @@
 
 import Foundation
 
-public enum DecimalTimePrecision: Codable, Hashable {
-    // No time
-    case none
-    // 8:50
-    case minutePrecision
-    // 8:50:42
-    case secondPrecision
-    // 8:50:42.123 (when given 3)
-    case subsecondPrecision(Int)
-}
-
 public enum DecimalTimeComponentFormat: Codable, Hashable {
     // None
     case none
