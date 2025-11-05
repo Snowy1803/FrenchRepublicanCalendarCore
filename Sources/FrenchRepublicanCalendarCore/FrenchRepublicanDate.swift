@@ -26,7 +26,7 @@ public struct FrenchRepublicanDate: Hashable {
     // MARK: Instance variables
     
     /// the system Date value for this Republican Date
-    public var date: Date
+    public private(set) var date: Date
     
     /// `year`: The year, starting at 1 for 1792-09-22,
     ///
@@ -43,7 +43,7 @@ public struct FrenchRepublicanDate: Hashable {
     /// weekOfMonth: The week within the month (a week being 10 days),
     ///
     /// weekOfYear: The week within the year (a week being 10 days)
-    public var components: DateComponents!
+    public private(set) var components: DateComponents!
     
     public private(set) var options: FrenchRepublicanDateOptions
     
@@ -70,7 +70,8 @@ public struct FrenchRepublicanDate: Hashable {
     public init(date: Date, options: FrenchRepublicanDateOptions? = nil) {
         self.date = date
         self.options = .resolve(options)
-        dateToFrenchRepublican()
+        let (dayOfYear, year) = self.options.variant.impl.convertToRepublican(gregorian: date, in: self.options.gregorianCalendar)
+        initComponents(dayOfYear: dayOfYear, year: year)
     }
     
     /// Creates a Republican Date from Republican Date components. The `date` property will contain the Gregorian value, so this converts from Republican to Gregorian
@@ -96,21 +97,11 @@ public struct FrenchRepublicanDate: Hashable {
     ///   - nanosecond: Nanoseconds
     public init(dayInYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil, options: FrenchRepublicanDateOptions? = nil) {
         self.options = .resolve(options)
-        self.date = Date(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: self.options)
-        initComponents(dayOfYear: dayInYear - 1, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+        self.date = Date(republicanDayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: self.options)
+        initComponents(dayOfYear: dayInYear - 1, year: year)
     }
     
-    /// Logic that converts the `date` value to republican date components. Called by the Gregorian > Republican constructor
-    private mutating func dateToFrenchRepublican() {
-        let gregorianCalendar = options.gregorianCalendar
-        let gregorian = gregorianCalendar.dateComponents([.hour, .minute, .second, .nanosecond], from: date)
-        
-        let (dayOfYear, year) = options.variant.impl.convertToRepublican(gregorian: date, in: gregorianCalendar)
-        
-        initComponents(dayOfYear: dayOfYear, year: year, hour: gregorian.hour, minute: gregorian.minute, second: gregorian.second, nanosecond: gregorian.nanosecond)
-    }
-    
-    /// Initializes the `components` property with the given values
+    /// Initializes the `components` property with the given values. The time used is the one in the gregorian `date`
     /// - Parameters:
     ///   - dayOfYear: Day of year, 0-indexed
     ///   - year: Year
@@ -118,8 +109,24 @@ public struct FrenchRepublicanDate: Hashable {
     ///   - minute: Minutes
     ///   - second: Seconds
     ///   - nanosecond: Nanoseconds
-    private mutating func initComponents(dayOfYear: Int, year: Int, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, nanosecond: Int? = nil) {
-        self.components = DateComponents(timeZone: options.timeZone, year: year, month: dayOfYear / 30 + 1, day: dayOfYear % 30 + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond, weekday: dayOfYear % 10 + 1, quarter: dayOfYear / 90 + 1, weekOfMonth: dayOfYear % 30 / 10 + 1, weekOfYear: dayOfYear / 10 + 1, yearForWeekOfYear: year)
+    private mutating func initComponents(dayOfYear: Int, year: Int) {
+        let timeComponents = options.gregorianCalendar.dateComponents([.hour, .minute, .second, .nanosecond], from: date)
+
+        self.components = DateComponents(
+            timeZone: options.timeZone,
+            year: year,
+            month: dayOfYear / 30 + 1,
+            day: dayOfYear % 30 + 1,
+            hour: timeComponents.hour!,
+            minute: timeComponents.minute!,
+            second: timeComponents.second!,
+            nanosecond: timeComponents.nanosecond!,
+            weekday: dayOfYear % 10 + 1,
+            quarter: dayOfYear / 90 + 1,
+            weekOfMonth: dayOfYear % 30 / 10 + 1,
+            weekOfYear: dayOfYear / 10 + 1,
+            yearForWeekOfYear: year
+        )
     }
     
     // MARK: Mutating utils
@@ -128,7 +135,7 @@ public struct FrenchRepublicanDate: Hashable {
     public mutating func nextYear() {
         components.year! += 1
         components.yearForWeekOfYear! += 1
-        date = Date(dayInYear: dayInYear, year: components.year!, hour: components.hour, minute: components.minute, second: components.second, nanosecond: components.nanosecond, options: options)
+        date = Date(republicanDayInYear: dayInYear, year: components.year!, hour: components.hour, minute: components.minute, second: components.second, nanosecond: components.nanosecond, options: options)
     }
 }
 
@@ -142,24 +149,9 @@ internal extension Date {
     ///   - second: Second, will directly be copied over
     ///   - nanosecond: Nanosecond, will directly be copied over
     /// - Note: Library users: use FrenchRepublicanDate.init(dayInYear: ...).date
-    init(dayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) {
-        self = options.gregorianCalendar.date(from: Date.dateToGregorian(dayInYear: dayInYear, year: year, hour: hour, minute: minute, second: second, nanosecond: nanosecond, options: options))!
-    }
-}
-
-fileprivate extension Date {
-    /// Converts a date from Republican to Gregorian date components.
-    /// - Parameters:
-    ///   - rDayInYear: Republican Day in Year, 1-indexed
-    ///   - rYear: Republican Year
-    ///   - hour: Hour, will directly be copied over
-    ///   - minute: Minute, will directly be copied over
-    ///   - second: Second, will directly be copied over
-    ///   - nanosecond: Nanosecond, will directly be copied over
-    /// - Returns: A DateComponents object containing the gregorian year and day of year, with the additional time components copied over.
-    static func dateToGregorian(dayInYear rDayInYear: Int, year rYear: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) -> DateComponents {
-        let (gDayOfYear, gYear) = options.variant.impl.convertToGregorian(rDayInYear: rDayInYear, rYear: rYear, in: options.gregorianCalendar)
-        
-        return DateComponents(calendar: options.gregorianCalendar, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+    init(republicanDayInYear: Int, year: Int, hour: Int?, minute: Int?, second: Int?, nanosecond: Int?, options: FrenchRepublicanDateOptions) {
+        let (gDayOfYear, gYear) = options.variant.impl.convertToGregorian(rDayInYear: republicanDayInYear, rYear: year, in: options.gregorianCalendar)
+        let dateComponents = DateComponents(calendar: options.gregorianCalendar, timeZone: options.timeZone, year: gYear, day: gDayOfYear + 1, hour: hour, minute: minute, second: second, nanosecond: nanosecond)
+        self = options.gregorianCalendar.date(from: dateComponents)!
     }
 }
