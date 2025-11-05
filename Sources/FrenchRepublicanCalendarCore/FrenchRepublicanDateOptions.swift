@@ -36,13 +36,15 @@ public protocol SaveableFrenchRepublicanDateOptions {
 }
 
 extension FrenchRepublicanDateOptions.Variant {
-    public func isYearSextil(_ year: Int) -> Bool {
+    var impl: RepublicanCalendarVariant {
         switch self {
-        case .original:
-            return year % 4 == 3
-        case .romme:
-            return (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0) && (year % 4000 != 0)
+        case .original: return .original
+        case .romme: return .romme
         }
+    }
+    
+    public func isYearSextil(_ year: Int) -> Bool {
+        impl.isYearSextil(year)
     }
 }
 
