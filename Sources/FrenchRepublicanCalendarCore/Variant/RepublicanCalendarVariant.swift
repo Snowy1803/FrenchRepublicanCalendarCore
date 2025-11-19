@@ -18,6 +18,9 @@ protocol CalendarVariant {
 }
 
 protocol RepublicanCalendarVariant: CalendarVariant {
+    /// The maximum safe gregorian date that can be used as input for this calendar, before it becomes unreliable
+    var maxSafeDate: Date { get }
+    
     /// Convert from gregorian to republican calendar
     /// - Parameter date: a gregorian date
     /// - Parameter gregorianCalendar: the gregorian calendar being used, with the right time zone set

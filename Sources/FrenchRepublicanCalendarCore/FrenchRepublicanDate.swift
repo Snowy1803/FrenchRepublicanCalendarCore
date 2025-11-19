@@ -19,7 +19,7 @@ public struct FrenchRepublicanDate: Hashable {
     /// The origin of the Republican Calendar, 1er Vendémiaire An 1 or 1792-09-22
     public static let origin = Date(timeIntervalSince1970: -5594191200)
     /// The maximum safe date to convert, currently 15300-12-31
-    public static let maxSafeDate = Date(timeIntervalSinceReferenceDate: 419675853600) // 15299-12-31
+    public static let maxSafeDate = FrenchRepublicanDateOptions.resolve(nil).variant.maxSafeDate
     /// The safe range that is guaranteed to convert properly
     public static let safeRange = origin...maxSafeDate
     

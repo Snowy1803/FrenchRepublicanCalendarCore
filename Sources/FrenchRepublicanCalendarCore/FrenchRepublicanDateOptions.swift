@@ -46,6 +46,10 @@ extension FrenchRepublicanDateOptions.Variant {
     public func isYearSextil(_ year: Int) -> Bool {
         impl.isYearSextil(year)
     }
+    
+    public var maxSafeDate: Date {
+        impl.maxSafeDate
+    }
 }
 
 extension FrenchRepublicanDateOptions.Variant: CustomStringConvertible {

@@ -14,6 +14,10 @@ import Foundation
 
 /// This calendar respects the Romme variation of Article X: a year is sextil every 4 years, except every 100 years, except every 400 years, except every 4000 years
 struct RommeVariant: RepublicanCalendarVariant {
+    var maxSafeDate: Date {
+        Date(timeIntervalSinceReferenceDate: 419675853600) // 15299-12-31
+    }
+
     func isYearSextil(_ year: Int) -> Bool {
         (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0) && (year % 4000 != 0)
     }
