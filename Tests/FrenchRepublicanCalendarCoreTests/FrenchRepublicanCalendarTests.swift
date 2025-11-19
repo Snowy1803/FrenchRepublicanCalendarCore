@@ -137,18 +137,18 @@ struct FrenchRepublicanCalendarTests {
     @Test("Date formatter with various formats")
     func formatter() throws {
         let randomDate = FrenchRepublicanDate(date: .init(timeIntervalSince1970: 1762023488.74243))
-        #expect(FRCFormat.short.format(randomDate) == "9 Brum.r")
-        #expect(FRCFormat.dayMonth.format(randomDate) == "9 Brumaire")
-        #expect(FRCFormat.long.format(randomDate) == "9 Brumaire An 234")
-        #expect(FRCFormat.veryLong.format(randomDate) == "Nonidi 9 Brumaire An 234")
-        #expect(FRCFormat.veryLong.hour().minute().second().format(randomDate) == "Nonidi 9 Brumaire An 234 à 8:32:04")
+        #expect(FRCFormat.short.format(randomDate) == "11 Brum.r")
+        #expect(FRCFormat.dayMonth.format(randomDate) == "11 Brumaire")
+        #expect(FRCFormat.long.format(randomDate) == "11 Brumaire An 234")
+        #expect(FRCFormat.veryLong.format(randomDate) == "Primidi 11 Brumaire An 234")
+        #expect(FRCFormat.veryLong.hour().minute().second().format(randomDate) == "Primidi 11 Brumaire An 234 à 8:32:04")
         #expect(FRCFormat().hour().minute().second().subsecond(.precision(3)).format(randomDate) == "8:32:04.563")
-        #expect(FRCFormat().day(.dayName).format(randomDate) == "Alisier")
+        #expect(FRCFormat().day(.dayName).format(randomDate) == "Salsifis")
     }
     
     @Test("Formatter with sansculottide dates")
     func formatterSansculottide() throws {
-        let randomDate = FrenchRepublicanDate(date: .init(timeIntervalSince1970: 1758529424.1234))
+        let randomDate = FrenchRepublicanDate(date: .init(timeIntervalSince1970: 1758356624.1234))
         #expect(FRCFormat.short.format(randomDate) == "Jr opinion")
         #expect(FRCFormat.dayMonth.format(randomDate) == "Jour de l'opinion")
         #expect(FRCFormat.long.format(randomDate) == "Jour de l'opinion An 233")
