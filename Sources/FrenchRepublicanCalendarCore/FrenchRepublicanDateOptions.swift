@@ -28,6 +28,7 @@ public struct FrenchRepublicanDateOptions: Hashable, Sendable {
     public enum Variant: Int, CaseIterable, Sendable {
         case original
         case romme
+        case delambre
     }
 }
 
@@ -40,6 +41,7 @@ extension FrenchRepublicanDateOptions.Variant {
         switch self {
         case .original: return .original
         case .romme: return .romme
+        case .delambre: return .delambre
         }
     }
     
@@ -57,6 +59,7 @@ extension FrenchRepublicanDateOptions.Variant: CustomStringConvertible {
         switch self {
         case .original: return "Original"
         case .romme: return "Romme"
+        case .delambre: return "Delambre"
         }
     }
 }

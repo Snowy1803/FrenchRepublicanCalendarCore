@@ -23,7 +23,7 @@ struct FrenchRepublicanCalendarTests {
         var date = FrenchRepublicanDate.origin
         var prevDay: Int?
         var prevYear: Int?
-        while date <= FrenchRepublicanDate.maxSafeDate {
+        while date <= variant.maxSafeDate {
             let frd = FrenchRepublicanDate(date: date, options: options)
             
             if let prevDay = prevDay,
@@ -35,6 +35,9 @@ struct FrenchRepublicanCalendarTests {
                     #expect(frd.dayInYear - prevDay == 1, "Invalid \(date) = \(frd.toLongString()) after \(FrenchRepublicanDate(dayInYear: prevDay, year: prevYear, options: options).toLongString())")
                     #expect(frd.components.year! == prevYear, "Year changed without resetting day at \(frd.toLongString())")
                 }
+            } else {
+                #expect(frd.dayInYear == 1, "First date should be the 1st of the year: \(frd.toLongString())")
+                #expect(frd.components.year! == 1, "First date should be in year 1: \(frd.toLongString())")
             }
             
             prevDay = frd.dayInYear
@@ -152,6 +155,17 @@ struct FrenchRepublicanCalendarTests {
         #expect(FRCFormat.veryLong.format(randomDate) == "Jour de l'opinion An 233")
         #expect(FRCFormat.veryLong.hour().minute().format(randomDate) == "Jour de l'opinion An 233 à 4:33")
         #expect(FRCFormat().day(.dayName).format(randomDate) == "Opinion")
+    }
+    
+    @Test("Print All Delambre", .disabled("Disabled by default"))
+    func printAllSansculottidesDelambre() {
+        for year in 1...1210 {
+            let p = "\(year) or \(FrenchRepublicanDate(dayInYear: 1, year: year, options: .init(romanYear: true, variant: .original)).formattedYear)"
+            print(p, terminator: String(repeating: " ", count: 20 - p.count))
+            let delambre = DelambreVariant()
+            print(delambre.isYearSextil(year) ? "S" : " ", terminator: "\t")
+            print("\(delambre.lookupConversion(year: year))/9/\(year + 1791)")
+        }
     }
 }
 
