@@ -23,7 +23,9 @@ public struct FrenchRepublicanDate: Hashable {
         FrenchRepublicanDateOptions.resolve(nil).variant.maxSafeDate
     }
     /// The safe range that is guaranteed to convert properly
-    public static let safeRange = origin...maxSafeDate
+    public static var safeRange: ClosedRange<Date> {
+        origin...maxSafeDate
+    }
     
     // MARK: Instance variables
     

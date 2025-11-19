@@ -96,8 +96,8 @@ extension FrenchRepublicanDateOptions {
 
 extension Calendar {
     /// Note: this depends on the current or default options — use options.gregorianCalendar to customize the TimeZone used by this calendar
-    public static let gregorian: Calendar = {
+    public static var gregorian: Calendar {
         let options = FrenchRepublicanDateOptions.resolve(nil)
         return options.gregorianCalendar
-    }()
+    }
 }
