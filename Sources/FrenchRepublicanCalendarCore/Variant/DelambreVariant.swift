@@ -15,7 +15,7 @@ import Foundation
 /// This calendar variant respects the original Article III: a year starts the day of the equinox, in the Paris meridian time
 struct DelambreVariant: RepublicanCalendarVariant {
     var maxSafeDate: Date {
-        Date(timeIntervalSince1970: 32503593600) // 2999-12-31
+        Date(timeIntervalSince1970: 32526439200) // 3000-09-21 / 5 sansculottides 1208
     }
 
     func lookupConversion(year: Int) -> Int {

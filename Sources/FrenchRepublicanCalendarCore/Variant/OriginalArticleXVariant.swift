@@ -15,7 +15,7 @@ import Foundation
 /// This calendar variant respects the original Article X: a year is sextil every 4 years, starting with year 3.
 struct OriginalArticleXVariant: RepublicanCalendarVariant {
     var maxSafeDate: Date {
-        Date(timeIntervalSinceReferenceDate: 419675853600) // 15299-12-31
+        Date(timeIntervalSinceReferenceDate: 419644317600) // 15298 / 5 sansculottides 13508
     }
 
     func isYearSextil(_ year: Int) -> Bool {
