@@ -128,13 +128,23 @@ public extension DecimalTime {
         }
     }
     
-    /// The second converted to SI units, and rounded to the nearest integer value
+    /// The second converted to SI units, not rounded
     var secondSIPrecise: TimeInterval {
         get {
             timeSinceMidnight.truncatingRemainder(dividingBy: 60)
         }
         set {
             timeSinceMidnight = TimeInterval(hourSI * 3600 + minuteSI * 60) + newValue
+        }
+    }
+    
+    /// The remainder (after the second) converted to SI units
+    var remainderSI: TimeInterval {
+        get {
+            timeSinceMidnight.truncatingRemainder(dividingBy: 1)
+        }
+        set {
+            timeSinceMidnight = TimeInterval(hourSI * 3600 + minuteSI * 60 + secondSI) + newValue
         }
     }
 }

@@ -190,4 +190,9 @@ extension FRCFormat {
         copy.decimalTime.subsecond = style
         return copy
     }
+    public func useSI(_ si: Bool = true) -> Self {
+        var copy = self
+        copy.decimalTime.useSI = si
+        return copy
+    }
 }

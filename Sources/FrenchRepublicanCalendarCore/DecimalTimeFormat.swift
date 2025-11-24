@@ -42,41 +42,47 @@ public struct DecimalTimeFormat: Codable, FormatStyle, Sendable {
     public var minute: MinuteFormat = .none
     public var second: SecondFormat = .none
     public var subsecond: SubSecondFormat = .none
+    public var useSI: Bool = false
     
     public func formatHour(_ time: DecimalTime) -> String? {
-        switch hour {
+        let hour = useSI ? time.hourSI : time.hour
+        let resolvedFormat = self.hour == .default ? (useSI ? .long : .short) : self.hour
+        switch resolvedFormat {
         case .none:
             return nil
         case .short, .default:
-            return "\(time.hour)"
+            return "\(hour)"
         case .long:
-            return String("0\(time.hour)".suffix(2))
+            return String("0\(hour)".suffix(2))
         }
     }
     
     public func formatMinute(_ time: DecimalTime) -> String? {
-        switch minute {
+        let minute = useSI ? time.minuteSI : time.minute
+        switch self.minute {
         case .none:
             return nil
         case .short:
-            return "\(time.minute)"
+            return "\(minute)"
         case .long, .default:
-            return String("0\(time.minute)".suffix(2))
+            return String("0\(minute)".suffix(2))
         }
     }
     
     public func formatSecond(_ time: DecimalTime) -> String? {
-        switch second {
+        let second = useSI ? time.secondSI : time.second
+        switch self.second {
         case .none:
             return nil
         case .short:
-            return "\(time.second)"
+            return "\(second)"
         case .long, .default:
-            return String("0\(time.second)".suffix(2))
+            return String("0\(second)".suffix(2))
         }
     }
     
     public func formatSubSecond(_ time: DecimalTime) -> String {
+        let remainder = useSI ? time.remainderSI : time.remainder
         switch subsecond {
         case .none, .precision(0):
             return ""
@@ -85,7 +91,7 @@ public struct DecimalTimeFormat: Codable, FormatStyle, Sendable {
             formatter.locale = .init(identifier: "en-US")
             formatter.minimumFractionDigits = length
             formatter.maximumFractionDigits = length
-            return "\(formatter.string(from: time.remainder as NSNumber)!.dropFirst())"
+            return "\(formatter.string(from: remainder as NSNumber)!.dropFirst())"
         }
     }
     
@@ -126,6 +132,12 @@ extension DecimalTimeFormat {
     public func subsecond(_ style: SubSecondFormat) -> Self {
         var copy = self
         copy.subsecond = style
+        return copy
+    }
+    
+    public func useSI(_ si: Bool = true) -> Self {
+        var copy = self
+        copy.useSI = si
         return copy
     }
 }

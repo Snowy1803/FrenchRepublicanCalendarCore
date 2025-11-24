@@ -144,6 +144,7 @@ struct FrenchRepublicanCalendarTests {
         #expect(FRCFormat.veryLong.hour().minute().second().format(randomDate) == "Primidi 11 Brumaire An 234 à 8:32:04")
         #expect(FRCFormat().hour().minute().second().subsecond(.precision(3)).format(randomDate) == "8:32:04.563")
         #expect(FRCFormat().day(.dayName).format(randomDate) == "Salsifis")
+        #expect(FRCFormat().hour().minute().second().subsecond(.precision(3)).useSI().format(randomDate) == "19:58:08.742")
     }
     
     @Test("Formatter with sansculottide dates")
