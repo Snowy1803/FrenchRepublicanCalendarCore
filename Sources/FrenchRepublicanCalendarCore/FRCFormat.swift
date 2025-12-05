@@ -98,7 +98,8 @@ public struct FRCFormat: Codable, FormatStyle, Sendable {
                     return date.sansculottideDayName
                 }
             } else {
-                return "\(date.components.day!) \(formatMonth(date: date))"
+                let day = date.components.day!
+                return "\(day)\(day == 1 && dayLength != .short ? "er" : "") \(formatMonth(date: date))"
             }
         }
     }
