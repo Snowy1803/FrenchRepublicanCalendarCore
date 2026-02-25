@@ -759,6 +759,741 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         // Révolution
         "Fête ultime célébrée les années sextiles en l'honneur du renversement de la monarchie"
     ]
+    
+    internal static let allDayGrammaticalNature: [DayNameNature] = [
+        // Raisin
+        .nm,
+        // Safran
+        .nm,
+        // Châtaigne
+        .nf,
+        // Colchique
+        .nm,
+        // Cheval
+        .nm,
+        // Balsamine
+        .nf,
+        // Carotte
+        .nf,
+        // Amaranthe
+        .nf,
+        // Panais
+        .nm,
+        // Cuve
+        .nf,
+        // Pomme de terre
+        .nf,
+        // Immortelle
+        .nf,
+        // Potiron
+        .nm,
+        // Réséda
+        .nm,
+        // Ane
+        .nm,
+        // Belle de nuit
+        .nf,
+        // Citrouille
+        .nf,
+        // Sarrasin
+        .nm,
+        // Tournesol
+        .nm,
+        // Pressoir
+        .nm,
+        // Chanvre
+        .nm,
+        // Pêche
+        .nf,
+        // Navet
+        .nm,
+        // Amaryllis
+        .nf,
+        // Bœuf
+        .nm,
+        // Aubergine
+        .nf,
+        // Piment
+        .nm,
+        // Tomate
+        .nf,
+        // Orge
+        .nf,
+        // Tonneau
+        .nm,
+        // Pomme
+        .nf,
+        // Céleri
+        .nm,
+        // Poire
+        .nf,
+        // Betterave
+        .nf,
+        // Oie
+        .nf,
+        // Héliotrope
+        .nm,
+        // Figue
+        .nf,
+        // Scorsonère
+        .nf,
+        // Alisier
+        .nm,
+        // Charrue
+        .nf,
+        // Salsifis
+        .nm,
+        // Macre
+        .nf,
+        // Topinambour
+        .nm,
+        // Endive
+        .nf,
+        // Dindon
+        .nm,
+        // Chervis
+        .nm,
+        // Cresson
+        .nm,
+        // Dentelaire
+        .nf,
+        // Grenade
+        .nf,
+        // Herse
+        .nf,
+        // Bacchante
+        .nf,
+        // Azerole
+        .nf,
+        // Garance
+        .nf,
+        // Orange
+        .nf,
+        // Faisan
+        .nm,
+        // Pistache
+        .nf,
+        // Macjonc
+        .nm,
+        // Coing
+        .nm,
+        // Cormier
+        .nm,
+        // Rouleau
+        .nm,
+        // Raiponce
+        .nf,
+        // Turneps
+        .nm,
+        // Chicorée
+        .nf,
+        // Nèfle
+        .nf,
+        // Cochon
+        .nm,
+        // Mâche
+        .nf,
+        // Chou-fleur
+        .nm,
+        // Miel
+        .nm,
+        // Genièvre
+        .nm,
+        // Pioche
+        .nf,
+        // Cire
+        .nf,
+        // Raifort
+        .nm,
+        // Cèdre
+        .nm,
+        // Sapin
+        .nm,
+        // Chevreuil
+        .nm,
+        // Ajonc
+        .nm,
+        // Cyprès
+        .nm,
+        // Lierre
+        .nm,
+        // Sabine
+        .nf,
+        // Hoyau
+        .nm,
+        // Erable sucré
+        .nm,
+        // Bruyère
+        .nf,
+        // Roseau
+        .nm,
+        // Oseille
+        .nf,
+        // Grillon
+        .nm,
+        // Pignon
+        .nm,
+        // Liège
+        .nm,
+        // Truffe
+        .nf,
+        // Olive
+        .nf,
+        // Pelle
+        .nf,
+        // Tourbe
+        .nf,
+        // Houille
+        .nf,
+        // Bitume
+        .nm,
+        // Soufre
+        .nm,
+        // Chien
+        .nm,
+        // Lave
+        .nf,
+        // Terre végétale
+        .nf,
+        // Fumier
+        .nm,
+        // Salpêtre
+        .nm,
+        // Fléau
+        .nm,
+        // Granit
+        .nm,
+        // Argile
+        .nf,
+        // Ardoise
+        .nf,
+        // Grès
+        .nm,
+        // Lapin
+        .nm,
+        // Silex
+        .nm,
+        // Marne
+        .nf,
+        // Pierre à chaux
+        .nf,
+        // Marbre
+        .nm,
+        // Van
+        .nm,
+        // Pierre à Plâtre
+        .nf,
+        // Sel
+        .nm,
+        // Fer
+        .nm,
+        // Cuivre
+        .nm,
+        // Chat
+        .nm,
+        // Étain
+        .nm,
+        // Plomb
+        .nm,
+        // Zinc
+        .nm,
+        // Mercure
+        .nm,
+        // Crible
+        .nm,
+        // Lauréole
+        .nf,
+        // Mousse
+        .nf,
+        // Fragon
+        .nm,
+        // Perce Neige
+        .nm,
+        // Taureau
+        .nm,
+        // Laurier thym
+        .nm,
+        // Amadouvier
+        .nm,
+        // Mézéréon
+        .nm,
+        // Peuplier
+        .nm,
+        // Cognée
+        .nf,
+        // Ellébore
+        .nm,
+        // Brocoli
+        .nm,
+        // Laurier
+        .nm,
+        // Avelinier
+        .nm,
+        // Vache
+        .nf,
+        // Buis
+        .nm,
+        // Lichen
+        .nm,
+        // If
+        .nm,
+        // Pulmonaire
+        .nf,
+        // Serpette
+        .nf,
+        // Thlaspi
+        .nm,
+        // Thimèle
+        .nf,
+        // Chiendent
+        .nm,
+        // Trainasse
+        .nf,
+        // Lièvre
+        .nm,
+        // Guède
+        .nf,
+        // Noisetier
+        .nm,
+        // Cyclamen
+        .nm,
+        // Chélidoine
+        .nf,
+        // Traineau
+        .nm,
+        // Tussilage
+        .nm,
+        // Cornouiller
+        .nm,
+        // Violier
+        .nm,
+        // Troëne
+        .nm,
+        // Bouc
+        .nm,
+        // Asaret
+        .nm,
+        // Alaterne
+        .nm,
+        // Violette
+        .nf,
+        // Marceau
+        .nm,
+        // Bêche
+        .nf,
+        // Narcisse
+        .nm,
+        // Orme
+        .nm,
+        // Fumeterre
+        .nf,
+        // Vélar
+        .nm,
+        // Chèvre
+        .nf,
+        // Épinard
+        .nm,
+        // Doronic
+        .nm,
+        // Mouron
+        .nm,
+        // Cerfeuil
+        .nm,
+        // Cordeau
+        .nm,
+        // Mandragore
+        .nf,
+        // Persil
+        .nm,
+        // Cochléaire
+        .nf,
+        // Pâquerette
+        .nf,
+        // Thon
+        .nm,
+        // Pissenlit
+        .nm,
+        // Sylve
+        .nf,
+        // Capillaire
+        .nf,
+        // Frêne
+        .nm,
+        // Plantoir
+        .nm,
+        // Primevère
+        .nf,
+        // Platane
+        .nm,
+        // Asperge
+        .nf,
+        // Tulipe
+        .nf,
+        // Poule
+        .nf,
+        // Blette
+        .nf,
+        // Bouleau
+        .nm,
+        // Jonquille
+        .nf,
+        // Aulne
+        .nm,
+        // Couvoir
+        .nm,
+        // Pervenche
+        .nf,
+        // Charme
+        .nm,
+        // Morille
+        .nf,
+        // Hêtre
+        .nm,
+        // Abeille
+        .nf,
+        // Laitue
+        .nf,
+        // Mélèze
+        .nm,
+        // Cigüe
+        .nf,
+        // Radis
+        .nm,
+        // Ruche
+        .nf,
+        // Gainier
+        .nm,
+        // Romaine
+        .nf,
+        // Marronnier
+        .nm,
+        // Roquette
+        .nf,
+        // Pigeon
+        .nm,
+        // Lilas
+        .nm,
+        // Anémone
+        .nf,
+        // Pensée
+        .nf,
+        // Myrtille
+        .nf,
+        // Greffoir
+        .nm,
+        // Rose
+        .nf,
+        // Chêne
+        .nm,
+        // Fougère
+        .nf,
+        // Aubépine
+        .nf,
+        // Rossignol
+        .nm,
+        // Ancolie
+        .nf,
+        // Muguet
+        .nm,
+        // Champignon
+        .nm,
+        // Hyacinthe
+        .nf,
+        // Râteau
+        .nm,
+        // Rhubarbe
+        .nf,
+        // Sainfoin
+        .nm,
+        // Bâton d'or
+        .nm,
+        // Chamerops
+        .nm,
+        // Ver à soie
+        .nm,
+        // Consoude
+        .nf,
+        // Pimprenelle
+        .nf,
+        // Corbeille d'or
+        .nf,
+        // Arroche
+        .nf,
+        // Sarcloir
+        .nm,
+        // Statice
+        .nm,
+        // Fritillaire
+        .nf,
+        // Bourache
+        .nf,
+        // Valériane
+        .nf,
+        // Carpe
+        .nf,
+        // Fusain
+        .nm,
+        // Civette
+        .nf,
+        // Buglosse
+        .nf,
+        // Sénevé
+        .nm,
+        // Houlette
+        .nf,
+        // Luzerne
+        .nf,
+        // Hémérocalle
+        .nf,
+        // Trèfle
+        .nm,
+        // Angélique
+        .nf,
+        // Canard
+        .nm,
+        // Mélisse
+        .nf,
+        // Fromental
+        .nm,
+        // Martagon
+        .nm,
+        // Serpolet
+        .nm,
+        // Faux
+        .nf,
+        // Fraise
+        .nf,
+        // Bétoine
+        .nf,
+        // Pois
+        .nm,
+        // Acacia
+        .nm,
+        // Caille
+        .nf,
+        // Œillet
+        .nm,
+        // Sureau
+        .nm,
+        // Pavot
+        .nm,
+        // Tilleul
+        .nm,
+        // Fourche
+        .nf,
+        // Barbeau
+        .nm,
+        // Camomille
+        .nf,
+        // Chèvre-feuille
+        .nm,
+        // Caille-lait
+        .nm,
+        // Tanche
+        .nf,
+        // Jasmin
+        .nm,
+        // Verveine
+        .nf,
+        // Thym
+        .nm,
+        // Pivoine
+        .nf,
+        // Chariot
+        .nm,
+        // Seigle
+        .nm,
+        // Avoine
+        .nf,
+        // Oignon
+        .nm,
+        // Véronique
+        .nf,
+        // Mulet
+        .nm,
+        // Romarin
+        .nm,
+        // Concombre
+        .nm,
+        // Échalotte
+        .nf,
+        // Absinthe
+        .nf,
+        // Faucille
+        .nf,
+        // Coriandre
+        .nf,
+        // Artichaut
+        .nm,
+        // Girofle
+        .nm,
+        // Lavande
+        .nf,
+        // Chamois
+        .nm,
+        // Tabac
+        .nm,
+        // Groseille
+        .nf,
+        // Gesse
+        .nf,
+        // Cerise
+        .nf,
+        // Parc
+        .nm,
+        // Menthe
+        .nf,
+        // Cumin
+        .nm,
+        // Haricot
+        .nm,
+        // Orcanète
+        .nf,
+        // Pintade
+        .nf,
+        // Sauge
+        .nf,
+        // Ail
+        .nm,
+        // Vesce
+        .nf,
+        // Blé
+        .nm,
+        // Chalémie
+        .nf,
+        // Épeautre
+        .nm,
+        // Bouillon blanc
+        .nm,
+        // Melon
+        .nm,
+        // Ivraie
+        .nf,
+        // Bélier
+        .nm,
+        // Prêle
+        .nf,
+        // Armoise
+        .nf,
+        // Carthame
+        .nm,
+        // Mûre
+        .nf,
+        // Arrosoir
+        .nm,
+        // Panis
+        .nm,
+        // Salicorne
+        .nf,
+        // Abricot
+        .nm,
+        // Basilic
+        .nm,
+        // Brebis
+        .nf,
+        // Guimauve
+        .nf,
+        // Lin
+        .nm,
+        // Amande
+        .nf,
+        // Gentiane
+        .nf,
+        // Écluse
+        .nf,
+        // Carline
+        .nf,
+        // Câprier
+        .nm,
+        // Lentille
+        .nf,
+        // Aunée
+        .nf,
+        // Loutre
+        .nf,
+        // Myrte
+        .nm,
+        // Colza
+        .nm,
+        // Lupin
+        .nm,
+        // Coton
+        .nm,
+        // Moulin
+        .nm,
+        // Prune
+        .nf,
+        // Millet
+        .nm,
+        // Lycoperdon
+        .nm,
+        // Escourgeon
+        .nm,
+        // Saumon
+        .nm,
+        // Tubéreuse
+        .nf,
+        // Sucrion
+        .nm,
+        // Apocyn
+        .nm,
+        // Réglisse
+        .nf,
+        // Échelle
+        .nf,
+        // Pastèque
+        .nf,
+        // Fenouil
+        .nm,
+        // Épine vinette
+        .nf,
+        // Noix
+        .nf,
+        // Truite
+        .nf,
+        // Citron
+        .nm,
+        // Cardère
+        .nf,
+        // Nerprun
+        .nm,
+        // Tagette
+        .nf,
+        // Hotte
+        .nf,
+        // Églantier
+        .nm,
+        // Noisette
+        .nf,
+        // Houblon
+        .nm,
+        // Sorgho
+        .nm,
+        // Écrevisse
+        .nf,
+        // Bigarade
+        .nf,
+        // Verge d'or
+        .nf,
+        // Maïs
+        .nm,
+        // Marron
+        .nm,
+        // Panier
+        .nm,
+        // Vertu
+        .nf,
+        // Génie
+        .nm,
+        // Travail
+        .nm,
+        // Opinion
+        .nf,
+        // Récompenses
+        .nfpl,
+        // Révolution
+        .nf
+    ]
 
     /// Returns string as EEEE d MMMM "An" yyyy
     public func toVeryLongString() -> String {
@@ -805,8 +1540,13 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         FrenchRepublicanDate.allDayNames[dayInYear - 1]
     }
     
+    /// the explanation for the day name
     public var dayNameExplanation: String {
         FrenchRepublicanDate.allDayExplanations[dayInYear - 1]
+    }
+    
+    public var dayNameGrammaticalNature: DayNameNature {
+        FrenchRepublicanDate.allDayGrammaticalNature[dayInYear - 1]
     }
     
     /// the name of the quarter, or season
@@ -890,5 +1630,12 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
             return nil
         }
         return URL(string: "https://fr.wiktionary.org/wiki/\(sanitizedName)")
+    }
+    
+    public enum DayNameNature: Sendable, Hashable {
+        case nm   // Nom masculin
+        case nf   // Nom féminin
+        case nmpl // Nom masculin pluriel (unused)
+        case nfpl // Nom féminin pluriel
     }
 }

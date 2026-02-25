@@ -171,10 +171,15 @@ struct FrenchRepublicanCalendarTests {
     
     @Test("Day explanations")
     func dayExplanations() {
-        #expect(FrenchRepublicanDate(day: 7, month: 6, year: 1).dayName == "Alaterne")
-        #expect(FrenchRepublicanDate(day: 7, month: 6, year: 1).dayNameExplanation == "Arbuste méditerranéen aux feuilles coriaces et aux baies noires appréciées des oiseaux")
-        #expect(FrenchRepublicanDate(day: 6, month: 13, year: 3).dayName == "Révolution")
-        #expect(FrenchRepublicanDate(day: 6, month: 13, year: 3).dayNameExplanation == "Fête ultime célébrée les années sextiles en l'honneur du renversement de la monarchie")
+        let alaterne = FrenchRepublicanDate(day: 7, month: 6, year: 1)
+        #expect(alaterne.dayName == "Alaterne")
+        #expect(alaterne.dayNameExplanation == "Arbuste méditerranéen aux feuilles coriaces et aux baies noires appréciées des oiseaux")
+        #expect(alaterne.dayNameGrammaticalNature == .nm)
+
+        let last = FrenchRepublicanDate(day: 6, month: 13, year: 3)
+        #expect(last.dayName == "Révolution")
+        #expect(last.dayNameExplanation == "Fête ultime célébrée les années sextiles en l'honneur du renversement de la monarchie")
+        #expect(last.dayNameGrammaticalNature == .nf)
     }
 }
 
