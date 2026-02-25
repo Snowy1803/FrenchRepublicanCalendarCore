@@ -33,10 +33,14 @@ public enum DayFormat: Codable, Sendable {
 }
 
 public enum DayLengthFormat: Codable, Sendable {
-    // 5 Vend.r or Jr vertu
+    // 5 Vend.r or Jr vertu (DayFormat.preferred)
+    // Cheval or Vertu (DayFormat.dayName)
     case short
-    // 5 Véndémiaire or Jour de la vertu
+    // 5 Véndémiaire or Jour de la vertu (DayFormat.preferred)
+    // Jour du cheval or Jour de la vertu (DayFormat.dayName)
     case long
+    // Long for DayFormat.preferred and DayFormat.monthOnly, short for DayFormat.dayName
+    case preferred
 }
 
 public enum YearFormat: Codable, Sendable {
@@ -54,7 +58,7 @@ public struct FRCFormat: Codable, FormatStyle, Sendable {
     
     public var weekday: WeekdayFormat = .none
     public var day: DayFormat = .none
-    public var dayLength: DayLengthFormat = .long
+    public var dayLength: DayLengthFormat = .preferred
     public var year: YearFormat = .none
     public var decimalTime: DecimalTimeFormat = .init()
     
@@ -76,7 +80,7 @@ public struct FRCFormat: Codable, FormatStyle, Sendable {
         switch dayLength {
         case .short:
             return date.shortMonthName
-        case .long:
+        case .long, .preferred:
             return date.monthName
         }
     }
@@ -88,13 +92,31 @@ public struct FRCFormat: Codable, FormatStyle, Sendable {
         case .monthOnly:
             return formatMonth(date: date)
         case .dayName:
-            return date.dayName
+            switch dayLength {
+            case .short, .preferred:
+                return date.dayName
+            case .long:
+                let lowerDayName = date.dayName.lowercased()
+                let startsWithVowel = lowerDayName.first.map { "aeiou".contains($0) } ?? false
+                if startsWithVowel {
+                    // No plural starts with a vowel, so we don't need to check for that
+                    return "Jour de l'\(lowerDayName)"
+                }
+                switch date.dayNameGrammaticalNature {
+                case .nm:
+                    return "Jour du \(lowerDayName)"
+                case .nf:
+                    return "Jour de la \(lowerDayName)"
+                case .nmpl, .nfpl:
+                    return "Jour des \(lowerDayName)"
+                }
+            }
         case .preferred:
             if date.isSansculottides {
                 switch dayLength {
                 case .short:
                     return date.shortSansculottideDayName
-                case .long:
+                case .long, .preferred:
                     return date.sansculottideDayName
                 }
             } else {

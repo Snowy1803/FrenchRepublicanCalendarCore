@@ -144,6 +144,7 @@ struct FrenchRepublicanCalendarTests {
         #expect(FRCFormat.veryLong.hour().minute().second().format(randomDate) == "Primidi 11 Brumaire An 234 à 8:32:04")
         #expect(FRCFormat().hour().minute().second().subsecond(.precision(3)).format(randomDate) == "8:32:04.563")
         #expect(FRCFormat().day(.dayName).format(randomDate) == "Salsifis")
+        #expect(FRCFormat().day(.dayName).dayLength(.long).format(randomDate) == "Jour du salsifis")
         #expect(FRCFormat().hour().minute().second().subsecond(.precision(3)).useSI().format(randomDate) == "19:58:08.742")
     }
     
@@ -156,6 +157,9 @@ struct FrenchRepublicanCalendarTests {
         #expect(FRCFormat.veryLong.format(randomDate) == "Jour de l'opinion An 233")
         #expect(FRCFormat.veryLong.hour().minute().format(randomDate) == "Jour de l'opinion An 233 à 4:33")
         #expect(FRCFormat().day(.dayName).format(randomDate) == "Opinion")
+        
+        let recompenses = FrenchRepublicanDate(day: 5, month: 13, year: 1)
+        #expect(FRCFormat().day(.dayName).dayLength(.long).format(recompenses) == "Jour des récompenses")
     }
     
     @Test("Print All Delambre", .disabled("Disabled by default"))
@@ -180,6 +184,8 @@ struct FrenchRepublicanCalendarTests {
         #expect(last.dayName == "Révolution")
         #expect(last.dayNameExplanation == "Fête ultime célébrée les années sextiles en l'honneur du renversement de la monarchie")
         #expect(last.dayNameGrammaticalNature == .nf)
+        #expect(FRCFormat().day(.dayName).format(last) == "Révolution")
+        #expect(FRCFormat().day(.dayName).dayLength(.long).format(last) == "Jour de la révolution")
     }
 }
 
