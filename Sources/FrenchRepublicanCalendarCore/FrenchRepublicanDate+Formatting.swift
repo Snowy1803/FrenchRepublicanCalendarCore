@@ -21,7 +21,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
     
     public static let allWeekdays = ["Primidi", "Duodi", "Tridi", "Quartidi", "Quintidi", "Sextidi", "Septidi", "Octidi", "Nonidi", "Décadi"]
     
-    public static let allDayNames = ["Raisin", "Safran", "Châtaigne", "Colchique", "Cheval", "Balsamine", "Carotte", "Amaranthe", "Panais", "Cuve", "Pomme de terre", "Immortelle", "Potiron", "Réséda", "Ane", "Belle de nuit", "Citrouille", "Sarrasin", "Tournesol", "Pressoir", "Chanvre", "Pêche", "Navet", "Amaryllis", "Bœuf", "Aubergine", "Piment", "Tomate", "Orge", "Tonneau", "Pomme", "Céleri", "Poire", "Betterave", "Oie", "Héliotrope", "Figue", "Scorsonère", "Alisier", "Charrue", "Salsifis", "Macre", "Topinambour", "Endive", "Dindon", "Chervis", "Cresson", "Dentelaire", "Grenade", "Herse", "Bacchante", "Azerole", "Garance", "Orange", "Faisan", "Pistache", "Macjonc", "Coing", "Cormier", "Rouleau", "Raiponce", "Turneps", "Chicorée", "Nèfle", "Cochon", "Mâche", "Chou-fleur", "Miel", "Genièvre", "Pioche", "Cire", "Raifort", "Cèdre", "Sapin", "Chevreuil", "Ajonc", "Cyprès", "Lierre", "Sabine", "Hoyau", "Erable sucré", "Bruyère", "Roseau", "Oseille", "Grillon", "Pignon", "Liège", "Truffe", "Olive", "Pelle", "Tourbe", "Houille", "Bitume", "Soufre", "Chien", "Lave", "Terre végétale", "Fumier", "Salpêtre", "Fléau", "Granit", "Argile", "Ardoise", "Grès", "Lapin", "Silex", "Marne", "Pierre à chaux", "Marbre", "Van", "Pierre à Plâtre", "Sel", "Fer", "Cuivre", "Chat", "Étain", "Plomb", "Zinc", "Mercure", "Crible", "Lauréole", "Mousse", "Fragon", "Perce Neige", "Taureau", "Laurier thym", "Amadouvier", "Mézéréon", "Peuplier", "Cognée", "Ellébore", "Brocoli", "Laurier", "Avelinier", "Vache", "Buis", "Lichen", "If", "Pulmonaire", "Serpette", "Thlaspi", "Thimèle", "Chiendent", "Trainasse", "Lièvre", "Guède", "Noisetier", "Cyclamen", "Chélidoine", "Traineau", "Tussilage", "Cornouiller", "Violier", "Troëne", "Bouc", "Asaret", "Alaterne", "Violette", "Marceau", "Bêche", "Narcisse", "Orme", "Fumeterre", "Vélar", "Chèvre", "Épinard", "Doronic", "Mouron", "Cerfeuil", "Cordeau", "Mandragore", "Persil", "Cochléaire", "Pâquerette", "Thon", "Pissenlit", "Sylve", "Capillaire", "Frêne", "Plantoir", "Primevère", "Platane", "Asperge", "Tulipe", "Poule", "Blette", "Bouleau", "Jonquille", "Aulne", "Couvoir", "Pervenche", "Charme", "Morille", "Hêtre", "Abeille", "Laitue", "Mélèze", "Cigüe", "Radis", "Ruche", "Gainier", "Romaine", "Marronnier", "Roquette", "Pigeon", "Lilas", "Anémone", "Pensée", "Myrtille", "Greffoir", "Rose", "Chêne", "Fougère", "Aubépine", "Rossignol", "Ancolie", "Muguet", "Champignon", "Hyacinthe", "Râteau", "Rhubarbe", "Sainfoin", "Bâton d'or", "Chamerops", "Ver à soie", "Consoude", "Pimprenelle", "Corbeille d'or", "Arroche", "Sarcloir", "Statice", "Fritillaire", "Bourache", "Valériane", "Carpe", "Fusain", "Civette", "Buglosse", "Sénevé", "Houlette", "Luzerne", "Hémérocalle", "Trèfle", "Angélique", "Canard", "Mélisse", "Fromental", "Martagon", "Serpolet", "Faux", "Fraise", "Bétoine", "Pois", "Acacia", "Caille", "Œillet", "Sureau", "Pavot", "Tilleul", "Fourche", "Barbeau", "Camomille", "Chèvre-feuille", "Caille-lait", "Tanche", "Jasmin", "Verveine", "Thym", "Pivoine", "Chariot", "Seigle", "Avoine", "Oignon", "Véronique", "Mulet", "Romarin", "Concombre", "Échalotte", "Absinthe", "Faucille", "Coriandre", "Artichaut", "Girofle", "Lavande", "Chamois", "Tabac", "Groseille", "Gesse", "Cerise", "Parc", "Menthe", "Cumin", "Haricot", "Orcanète", "Pintade", "Sauge", "Ail", "Vesce", "Blé", "Chalémie", "Épeautre", "Bouillon blanc", "Melon", "Ivraie", "Bélier", "Prêle", "Armoise", "Carthame", "Mûre", "Arrosoir", "Panis", "Salicorne", "Abricot", "Basilic", "Brebis", "Guimauve", "Lin", "Amande", "Gentiane", "Écluse", "Carline", "Câprier", "Lentille", "Aunée", "Loutre", "Myrte", "Colza", "Lupin", "Coton", "Moulin", "Prune", "Millet", "Lycoperdon", "Escourgeon", "Saumon", "Tubéreuse", "Sucrion", "Apocyn", "Réglisse", "Échelle", "Pastèque", "Fenouil", "Épine vinette", "Noix", "Truite", "Citron", "Cardère", "Nerprun", "Tagette", "Hotte", "Églantier", "Noisette", "Houblon", "Sorgho", "Écrevisse", "Bigarade", "Verge d'or", "Maïs", "Marron", "Panier", "Vertu", "Génie", "Travail", "Opinion", "Récompenses", "Révolution"]
+    public static let allDayNames = ["Raisin", "Safran", "Châtaigne", "Colchique", "Cheval", "Balsamine", "Carotte", "Amarante", "Panais", "Cuve", "Pomme de terre", "Immortelle", "Potiron", "Réséda", "Âne", "Belle de nuit", "Citrouille", "Sarrasin", "Tournesol", "Pressoir", "Chanvre", "Pêche", "Navet", "Amaryllis", "Bœuf", "Aubergine", "Piment", "Tomate", "Orge", "Tonneau", "Pomme", "Céleri", "Poire", "Betterave", "Oie", "Héliotrope", "Figue", "Scorsonère", "Alisier", "Charrue", "Salsifis", "Macre", "Topinambour", "Endive", "Dindon", "Chervis", "Cresson", "Dentelaire", "Grenade", "Herse", "Bacchante", "Azerole", "Garance", "Orange", "Faisan", "Pistache", "Macjonc", "Coing", "Cormier", "Rouleau", "Raiponce", "Turneps", "Chicorée", "Nèfle", "Cochon", "Mâche", "Chou-fleur", "Miel", "Genièvre", "Pioche", "Cire", "Raifort", "Cèdre", "Sapin", "Chevreuil", "Ajonc", "Cyprès", "Lierre", "Sabine", "Hoyau", "Érable sucré", "Bruyère", "Roseau", "Oseille", "Grillon", "Pignon", "Liège", "Truffe", "Olive", "Pelle", "Tourbe", "Houille", "Bitume", "Soufre", "Chien", "Lave", "Terre végétale", "Fumier", "Salpêtre", "Fléau", "Granit", "Argile", "Ardoise", "Grès", "Lapin", "Silex", "Marne", "Pierre à chaux", "Marbre", "Van", "Pierre à plâtre", "Sel", "Fer", "Cuivre", "Chat", "Étain", "Plomb", "Zinc", "Mercure", "Crible", "Lauréole", "Mousse", "Fragon", "Perce-neige", "Taureau", "Laurier thym", "Amadouvier", "Mézéréon", "Peuplier", "Cognée", "Ellébore", "Brocoli", "Laurier", "Avelinier", "Vache", "Buis", "Lichen", "If", "Pulmonaire", "Serpette", "Thlaspi", "Thymèle", "Chiendent", "Trainasse", "Lièvre", "Guède", "Noisetier", "Cyclamen", "Chélidoine", "Traineau", "Tussilage", "Cornouiller", "Violier", "Troène", "Bouc", "Asaret", "Alaterne", "Violette", "Marceau", "Bêche", "Narcisse", "Orme", "Fumeterre", "Vélar", "Chèvre", "Épinard", "Doronic", "Mouron", "Cerfeuil", "Cordeau", "Mandragore", "Persil", "Cochléaire", "Pâquerette", "Thon", "Pissenlit", "Sylve", "Capillaire", "Frêne", "Plantoir", "Primevère", "Platane", "Asperge", "Tulipe", "Poule", "Blette", "Bouleau", "Jonquille", "Aulne", "Couvoir", "Pervenche", "Charme", "Morille", "Hêtre", "Abeille", "Laitue", "Mélèze", "Cigüe", "Radis", "Ruche", "Gainier", "Romaine", "Marronnier", "Roquette", "Pigeon", "Lilas", "Anémone", "Pensée", "Myrtille", "Greffoir", "Rose", "Chêne", "Fougère", "Aubépine", "Rossignol", "Ancolie", "Muguet", "Champignon", "Hyacinthe", "Râteau", "Rhubarbe", "Sainfoin", "Bâton d'or", "Chamerops", "Ver à soie", "Consoude", "Pimprenelle", "Corbeille d'or", "Arroche", "Sarcloir", "Statice", "Fritillaire", "Bourache", "Valériane", "Carpe", "Fusain", "Civette", "Buglosse", "Sénevé", "Houlette", "Luzerne", "Hémérocalle", "Trèfle", "Angélique", "Canard", "Mélisse", "Fromental", "Martagon", "Serpolet", "Faux", "Fraise", "Bétoine", "Pois", "Acacia", "Caille", "Œillet", "Sureau", "Pavot", "Tilleul", "Fourche", "Barbeau", "Camomille", "Chèvrefeuille", "Caille-lait", "Tanche", "Jasmin", "Verveine", "Thym", "Pivoine", "Chariot", "Seigle", "Avoine", "Oignon", "Véronique", "Mulet", "Romarin", "Concombre", "Échalote", "Absinthe", "Faucille", "Coriandre", "Artichaut", "Girofle", "Lavande", "Chamois", "Tabac", "Groseille", "Gesse", "Cerise", "Parc", "Menthe", "Cumin", "Haricot", "Orcanète", "Pintade", "Sauge", "Ail", "Vesce", "Blé", "Chalémie", "Épeautre", "Bouillon blanc", "Melon", "Ivraie", "Bélier", "Prêle", "Armoise", "Carthame", "Mûre", "Arrosoir", "Panis", "Salicorne", "Abricot", "Basilic", "Brebis", "Guimauve", "Lin", "Amande", "Gentiane", "Écluse", "Carline", "Câprier", "Lentille", "Aunée", "Loutre", "Myrte", "Colza", "Lupin", "Coton", "Moulin", "Prune", "Millet", "Lycoperdon", "Escourgeon", "Saumon", "Tubéreuse", "Sucrion", "Apocyn", "Réglisse", "Échelle", "Pastèque", "Fenouil", "Épine-vinette", "Noix", "Truite", "Citron", "Cardère", "Nerprun", "Tagette", "Hotte", "Églantier", "Noisette", "Houblon", "Sorgho", "Écrevisse", "Bigarade", "Verge d'or", "Maïs", "Marron", "Panier", "Vertu", "Génie", "Travail", "Opinion", "Récompenses", "Révolution"]
     
     public static let allQuarters = ["Automne", "Hiver", "Printemps", "Été", "Sansculottides"]
     
@@ -40,7 +40,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Plante herbacée dont les fruits explosent au toucher pour disperser leurs graines",
         // Carotte
         "Légume racine cultivé et consommé abondamment durant la saison froide",
-        // Amaranthe
+        // Amarante
         "Plante robuste aux fleurs rouges persistantes, symbole d'immortalité",
         // Panais
         "Légume racine ancien très consommé en Europe avant l'arrivée de la pomme de terre",
@@ -54,7 +54,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Grosse courge d'automne, cultivée pour sa chair généreuse et sa conservation",
         // Réséda
         "Plante parfumée cultivée pour son odeur agréable et ses propriétés médicinales",
-        // Ane
+        // Âne
         "Animal de bât robuste et frugal, compagnon indispensable des paysans",
         // Belle de nuit
         "Fleur ornementale qui ne s'ouvre qu'en fin de journée et diffuse un doux parfum",
@@ -186,7 +186,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Arbuste résineux de la famille des genévriers, utilisé en pharmacopée ancienne",
         // Hoyau
         "Outil agricole à large lame recourbée, utilisé pour sarcler ou défricher",
-        // Erable sucré
+        // Érable sucré
         "Arbre dont la sève est récoltée pour produire un sirop très sucré",
         // Bruyère
         "Plante des landes aux fleurs roses d'hiver, utilisée pour faire des balais",
@@ -246,7 +246,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Roche calcaire cristallisée, appréciée en sculpture et en architecture",
         // Van
         "Panier plat en osier utilisé pour secouer et nettoyer le grain de ses impuretés",
-        // Pierre à Plâtre
+        // Pierre à plâtre
         "Gypse que l'on chauffe et broie pour obtenir du plâtre à bâtir",
         // Sel
         "Minéral indispensable à la conservation des aliments et à la vie, extrait des marais salants",
@@ -272,7 +272,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Végétal spongieux poussant dans les lieux humides et ombragés, typique de l'hiver",
         // Fragon
         "Arbuste piquant aussi appelé 'petit houx', dont les boules rouges égayent l'hiver",
-        // Perce Neige
+        // Perce-neige
         "Petite fleur blanche courageuse, la première à éclore avant la fin des neiges",
         // Taureau
         "Mâle reproducteur de l'espèce bovine, symbole de force brutale et de fertilité",
@@ -308,7 +308,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Couteau à lame courbe, outil indispensable du vigneron et du jardinier pour tailler",
         // Thlaspi
         "Petite plante herbacée appelée aussi monnoyère à cause de ses fruits ronds",
-        // Thimèle
+        // Thymèle
         "Nom ancien d'une variété de daphné, petit arbuste fleuri d'hiver",
         // Chiendent
         "Herbe tenace et envahissante, hantise du paysan mais dont la racine a des vertus médicinales",
@@ -332,7 +332,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Arbuste donnant les cornouilles, petits fruits rouges acidulés, au bois très dur",
         // Violier
         "Fleur du printemps apparentée à la giroflée, très odorante et décorative",
-        // Troëne
+        // Troène
         "Arbuste rustique couramment planté en haies pour protéger les jardins et vergers",
         // Bouc
         "Mâle de la chèvre, reconnaissable à ses cornes et à son odeur forte",
@@ -550,7 +550,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Nom campagnard du bleuet, cette jolie fleur sauvage poussant dans les champs de blé",
         // Camomille
         "Plante odorante commune cueillie l'été et séchée pour ses vertus apaisantes en infusion",
-        // Chèvre-feuille
+        // Chèvrefeuille
         "Liane forestière dont la floraison estivale embaume délicatement l'air en fin de journée",
         // Caille-lait
         "Plante dont certaines espèces contiennent des enzymes permettant de faire cailler le lait",
@@ -580,7 +580,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Arbuste aromatique du sud de la France, au parfum camphré, utilisé en cuisine et médecine",
         // Concombre
         "Légume de plein été rafraîchissant, riche en eau, poussant à même le sol chaud",
-        // Échalotte
+        // Échalote
         "Bulbe cousin de l'oignon cultivé pour son goût subtil, un grand classique des sauces françaises",
         // Absinthe
         "Plante amère et tonique utilisée pour préparer la fameuse liqueur anisée du même nom",
@@ -710,7 +710,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         "Grand fruit lourd poussant au ras du sol chaud du midi, gorgé d'eau désaltérante",
         // Fenouil
         "Plante anisée dont les bulbes et graines sont au pic de leur saveur en fin d'été",
-        // Épine vinette
+        // Épine-vinette
         "Arbuste défensif très épineux donnant de petites baies rouges acidulées à la fin de l'été",
         // Noix
         "Fruit du noyer récolté en septembre, essentiel pour extraire l'huile d'éclairage et de cuisine",
@@ -775,7 +775,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nf,
         // Carotte
         .nf,
-        // Amaranthe
+        // Amarante
         .nf,
         // Panais
         .nm,
@@ -789,7 +789,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nm,
         // Réséda
         .nm,
-        // Ane
+        // Âne
         .nm,
         // Belle de nuit
         .nf,
@@ -921,7 +921,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nf,
         // Hoyau
         .nm,
-        // Erable sucré
+        // Érable sucré
         .nm,
         // Bruyère
         .nf,
@@ -981,7 +981,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nm,
         // Van
         .nm,
-        // Pierre à Plâtre
+        // Pierre à plâtre
         .nf,
         // Sel
         .nm,
@@ -1007,7 +1007,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nf,
         // Fragon
         .nm,
-        // Perce Neige
+        // Perce-neige
         .nm,
         // Taureau
         .nm,
@@ -1043,7 +1043,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nf,
         // Thlaspi
         .nm,
-        // Thimèle
+        // Thymèle
         .nf,
         // Chiendent
         .nm,
@@ -1067,7 +1067,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nm,
         // Violier
         .nm,
-        // Troëne
+        // Troène
         .nm,
         // Bouc
         .nm,
@@ -1285,7 +1285,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nm,
         // Camomille
         .nf,
-        // Chèvre-feuille
+        // Chèvrefeuille
         .nm,
         // Caille-lait
         .nm,
@@ -1315,7 +1315,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nm,
         // Concombre
         .nm,
-        // Échalotte
+        // Échalote
         .nf,
         // Absinthe
         .nf,
@@ -1445,7 +1445,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         .nf,
         // Fenouil
         .nm,
-        // Épine vinette
+        // Épine-vinette
         .nf,
         // Noix
         .nf,
@@ -1614,13 +1614,11 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         let wikipediaOverrides = [
             "Belle de nuit": "Mirabilis_jalapa",
             "Amaryllis": "Amaryllis_(plante)",
-            "Erable sucré": "%C3%89rable_%C3%A0_sucre",
-            "Perce Neige": "Perce-neige",
+            "Érable sucré": "%C3%89rable_%C3%A0_sucre",
             "Laurier thym": "Viorne_tin",
-            "Thimèle": "Daphn%C3%A9_garou",
+            "Thymèle": "Daphn%C3%A9_garou",
             "Bâton d'or": "Girofl%C3%A9e_des_murailles",
             "Chamerops": "Chamaerops_humilis",
-            "Épine vinette": "%C3%89pine-vinette",
             "Verge d'or": "Solidago"
         ]
         if let override = wikipediaOverrides[dayName] {
@@ -1629,7 +1627,7 @@ extension FrenchRepublicanDate: CustomDebugStringConvertible {
         guard let sanitizedName = dayName.lowercased().addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else {
             return nil
         }
-        return URL(string: "https://fr.wiktionary.org/wiki/\(sanitizedName)")
+        return URL(string: "https://fr.wiktionary.org/wiki/\(sanitizedName)#fr")
     }
     
     public enum DayNameNature: Sendable, Hashable {

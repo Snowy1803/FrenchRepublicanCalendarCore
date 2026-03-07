@@ -97,7 +97,7 @@ public struct FRCFormat: Codable, FormatStyle, Sendable {
                 return date.dayName
             case .long:
                 let lowerDayName = date.dayName.lowercased()
-                let startsWithVowel = lowerDayName.first.map { "aeiou".contains($0) } ?? false
+                let startsWithVowel = (lowerDayName.first.map { "aeiouéœâ".contains($0) } ?? false) || lowerDayName == "héliotrope" || lowerDayName == "hémérocalle" || lowerDayName == "hyacinthe"
                 if startsWithVowel {
                     // No plural starts with a vowel, so we don't need to check for that
                     return "Jour de l'\(lowerDayName)"
